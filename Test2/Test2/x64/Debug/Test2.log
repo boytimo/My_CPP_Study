@@ -1,3 +1,3 @@
 ﻿  main.cpp
-main.obj : error LNK2019: "public: class Complex __cdecl Complex::operator+(class Complex const &)const " (??HComplex@@QEBA?AV0@AEBV0@@Z)"public: class Complex & __cdecl Complex::operator+=(class Complex const &)" (??YComplex@@QEAAAEAV0@AEBV0@@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
-C:\Users\boyti\Desktop\CPP_study\ex\Test2\x64\Debug\Test2.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.
+C:\Users\boyti\Desktop\CPP_study\ex\Test2\Test2\main.cpp(1098,34): warning C4267: '초기화 중': 'size_t'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  Test2.vcxproj -> C:\Users\boyti\Desktop\CPP_study\ex\Test2\x64\Debug\Test2.exe

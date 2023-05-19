@@ -114,7 +114,7 @@
 //    //객체의 주소값을 복사한다 
 //}
 
-//		//		//		//		//		//		//		//
+//-----------------------------------------------------------------------------
 //내가 만든 문자열 
 
 //#include<string.h>
@@ -472,7 +472,7 @@
 //
 //	//str1.println();
 //	//str2.println();
-//	//		//		//		//		//		//
+//-----------------------------------------------------------------------------
 //
 //	//MyString str1("very very very long string");
 //	//MyString str2("");
@@ -493,7 +493,7 @@
 //	//str1.assign("very long string");
 //	//str1.println();
 //
-//	//		//		//		//		//		//	
+//-----------------------------------------------------------------------------
 //
 //	//MyString str1("this is a very very long string");
 //	//MyString str2("<some string inserted between>");
@@ -531,10 +531,10 @@
 //	str2.erase(0, 7);
 //	str2.println();
 //}
-
-//		//		//		//		//		//		//		//
+//-----------------------------------------------------------------------------
 //explicit 이해
-
+//원하지 않는 암시적 변환을 막음
+// 
 //#include <iostream>
 //
 //class MyString 
@@ -604,7 +604,7 @@
 //int main()
 //{
 //	MyString s(3);
-//	DoSomethingWithstring(4);
+//	DoSomethingWithstring(4); //오류
 //}
 
 //		//		//		//		//		//
@@ -632,7 +632,8 @@
 //    a.PrintData();
 //}
 
-//		//		//		//		//		//		//		//
+//-----------------------------------------------------------------------------
+//operator 
 
 //#include <string.h>
 //#include <iostream>
@@ -775,193 +776,497 @@
 //    else
 //        std::cout << "st2 와 str3 는 다르다" << std::endl;
 //}
-#include<iostream>
+// 
+//#include<iostream>
+//
+//class Complex
+//{
+//private:
+//	double real, img; //real 실수, img 허수부
+//	double get_number(const char* str, int from, int to)const;
+//
+//public:
+//	Complex(double real, double img)
+//		:real(real), img(img)
+//	{}
+//	Complex(const Complex& c)
+//	{
+//		real = c.real;
+//		img = c.img;
+//	}
+//	Complex(const char* str);
+//
+//	Complex operator+(const Complex& c)const;
+//	Complex operator-(const Complex& c)const;
+//	Complex operator*(const Complex& c)const;
+//	Complex operator/(const Complex& c)const;
+//
+//	Complex &operator=(const Complex& c);
+//
+//	void println()
+//	{
+//		std::cout << "(" << real << " , " << img << " ) " << std::endl;
+//	}
+//
+//	Complex& operator+=(const Complex& c);
+//	Complex& operator-=(const Complex& c);
+//	Complex& operator*=(const Complex& c);
+//	Complex& operator/=(const Complex& c);
+//
+//	Complex operator+(const char*str)const;
+//	Complex operator-(const char* str)const;
+//	Complex operator*(const char* str)const;
+//	Complex operator/(const char* str)const;
+//	
+//};
+//
+//Complex Complex::operator+(const Complex& c)const
+//{
+//	Complex temp(real + c.real, img + c.img);
+//	return temp;
+//}
+//
+//Complex Complex::operator-(const Complex& c)const
+//{
+//	Complex temp(real - c.real, img - c.img);
+//	return temp;
+//}
+//
+//Complex Complex::operator*(const Complex& c)const
+//{
+//	Complex temp(real * c.real - img * c.img, real * c.img + img * c.real);
+//	return temp;
+//}
+//
+//Complex Complex::operator/(const Complex& c)const
+//{
+//	Complex temp(
+//		(real * c.real + img * c.img) / (c.real * c.real + c.img * c.img),
+//		(img * c.real - real * c.img) / (c.real * c.real + c.img * c.img));
+//	return temp;
+//}
+//
+//Complex& Complex::operator=(const Complex& c)
+//{
+//	real = c.real;
+//	img = c.img;
+//	return *this;
+//}
+//
+//Complex& Complex::operator+=(const Complex& c)
+//{
+//	(*this) = (*this) + c;
+//	return *this;
+//}
+//
+//Complex& Complex::operator-=(const Complex& c)
+//{
+//	(*this) = (*this) - c;
+//	return*this;
+//}
+//
+//Complex& Complex::operator*=(const Complex& c) 
+//{
+//	(*this) = (*this) * c;
+//	return *this;
+//}
+//Complex& Complex::operator/=(const Complex& c) 
+//{
+//	(*this) = (*this) / c;
+//	return *this;
+//}
+//
+//double Complex::get_number(const char* str, int from, int to)const
+//{
+//	bool minus = false;
+//
+//	if (from > to)
+//		return 0;
+//	if (str[from] == '-')
+//		minus = true;
+//	if (str[from] == '-' || str[from] == '+')
+//		from++;
+//
+//	double num = 0.0;
+//	double decimal = 1.0;
+//
+//	bool integer_part = true;
+//	
+//	for (int i = from; i <= to; i++)
+//	{
+//		if (isdigit(str[i]) && integer_part)
+//		{
+//			num += 10.0;
+//			num += (str[i] == '.');
+//		}
+//		else if (str[i] == '.')
+//			integer_part = false;
+//		else if (isdigit(str[i]) && !integer_part)
+//		{
+//			decimal /= 10.0;
+//			num += ((str[i] - '0') * decimal);
+//			//ASCII 테이블 상에서 0 부터 9 까지 숫자들이 크기 순으로 연속적으로 배열되어 있기 때문에 단순히 '0' 을 빼버리면
+//			//그 숫자에 해당하는 실제 정수 값을 구할 수 있게 됩니다.
+//		}
+//		else
+//			break;
+//	}
+//	if (minus)
+//		num *= -1.0;
+//
+//	return num; 
+//}
+//
+//Complex::Complex(const char* str)
+////입력 받은 문자열을 분석하여 real 부분과 img부분을 찾아야한다 
+////문자열의 꼴은 다음과 같다 "[부호](실수부)[부호]i(허수부)
+////이 때 맨 앞의 부호는 생략 가능( 생략시 +라 가정)
+//{
+//
+//	int begin = 0, end = strlen(str);
+//	img = 0.0;
+//	real = 0.0;
+//
+//	// 먼저 가장 기준이 되는 'i' 의 위치를 찾는다.
+//	int pos_i = -1;
+//	for (int i = 0; i != end; i++) {
+//		if (str[i] == 'i') {
+//			pos_i = i;
+//			break;
+//		}
+//	}
+//
+//	// 만일 'i' 가 없다면 이 수는 실수 뿐이다.
+//	if (pos_i == -1) {
+//		real = get_number(str, begin, end - 1);
+//		return;
+//	}
+//
+//	// 만일 'i' 가 있다면,  실수부와 허수부를 나누어서 처리하면 된다.
+//	real = get_number(str, begin, pos_i - 1);
+//	img = get_number(str, pos_i + 1, end - 1);
+//
+//	if (pos_i >= 1 && str[pos_i - 1] == '-') img *= -1.0;
+//}
+//
+//Complex Complex::operator+(const char* str) const 
+//{
+//	Complex temp(str);
+//	return (*this) + temp;
+//}
+//Complex Complex::operator-(const char* str) const 
+//{
+//	Complex temp(str);
+//	return (*this) - temp;
+//}
+//Complex Complex::operator*(const char* str) const 
+//{
+//	Complex temp(str);
+//	return (*this) * temp;
+//}
+//Complex Complex::operator/(const char* str) const 
+//{
+//	Complex temp(str);
+//	return (*this) / temp;
+//}
+//int main()
+//{
+//	Complex a(1.0, 2.0);
+//	Complex b(3.0, -2.0);
+//
+//	Complex c = a * b;
+//
+//	c.println();
+//
+//	int d = '1';
+//	std::cout << d << std::endl;
+//
+//	//a += b;
+//	//a.println();
+//	//b.println();
+//
+//	//Complex a = b; --> 복사생성자 
+//	//Complex a; a=b; --> 기본생성자 호출 후 대입 연산자 함수 실행
+//
+//	//Complex a(0, 0);
+//	//a = a + "-1.1 + i3.923";
+//	//a.println();
+//	//a = a - "1.2 -i1.823";
+//	//a.println();
+//	//a = a * "2.3+i22";
+//	//a.println();
+//	//a = a / "-12+i55";
+//	//a.println();
+//}
 
-class Complex
-{
-private:
-	double real, img; //real 실수, img 허수부
+//-----------------------------------------------------------------------------////friend 다른 클래스가 private에 접근 할 수 있게 하는 함수
+
+//#include <iostream>
+//class A
+//{
+//private:
+//
+//	void private_func(){}
+//	int private_num;
+//
+//	//B 는 A의 친구
+//	friend class B;
+//	//func은 A의 친구
+//	//friend void func();
+//};
+//// A 만 friend 설정을 했기 때문에 B에서 A는 접근이 가능하지만
+//// A에서 B는 접근이 불가능 하다 
+//class B
+//{
+//public:
+//	void b()
+//	{
+//		A a;
+//
+//		//비록 private 함수의 필드들이지만 친구이기 때문에 접근 가능 
+//		a.private_func();
+//		a.private_num = 2;
+//	}
+//
+//	void func()
+//	{
+//		A a;
+//
+//		//비록 private 함수의 필드들이지만 위와 마찬가지로 친구이기 때문에 접근
+//		//가능
+//		a.private_func();
+//		a.private_num = 2;
+//	}
+//};
+
+//      //      //      //      //      //      //      //
+
+//a = a + a -->밑에 두개 함수가 있으면 오류 발생
+//operator+(a,a)
+//a.operator+a 
+
+//a.real 과 b.real은 private이기 때문에 friend를 설정했음
+//통상적으로 자기 자신을 리턴하지 않는 이항 연산자들 + - * / 모두 외부함수로
+//선언하는 것이 원칙
+
+//반대로 자기 자신을 리턴하는 이항 연산자 += -= 같은 애들은
+//(클래스)멤버 함수로 선언하는 것이 원칙
+
+
+//#include <cstring>
+//#include <iostream>
+//#include "mystd.h"
+//class Complex
+//{
+//private:
+//	double real, img;
+//
+//	double get_number(const char* str, int from, int to) const;
+//
+//public:
+//	Complex(double real, double img) : real(real), img(img) {}
+//	Complex(const Complex& c) { real = c.real, img = c.img; }
+//	Complex(const char* str);
+//
+//	Complex& operator=(const Complex& c);
+//
+//	// 나머지 연산자 함수들은 생략 :)
+//
+//	void println()
+//	{
+//		std::cout << "( " << real << " , " << img << " ) " << std::endl;
+//	}
+//
+//	friend Complex operator+(const Complex& a, const Complex& b);
+//
+//	friend std::ostream& operator<<(std::ostream& os, const Complex& c);
+//};
+//
+//Complex operator+(const Complex& a, const Complex& b)
+//{
+//	Complex temp(a.real + b.real, a.img + b.img);
+//	return temp;
+//}
+//
+//
+//Complex::Complex(const char* str)
+//{
+//	// 입력 받은 문자열을 분석하여 real 부분과 img 부분을 찾아야 한다.
+//	// 문자열의 꼴은 다음과 같습니다 "[부호](실수부)(부호)i(허수부)"
+//	// 이 때 맨 앞의 부호는 생략 가능합니다. (생략시 + 라 가정)
+//
+//	int begin = 0, end = strlen(str);
+//	img = 0.0;
+//	real = 0.0;
+//
+//	// 먼저 가장 기준이 되는 'i' 의 위치를 찾는다.
+//	int pos_i = -1;
+//	for (int i = 0; i != end; i++)
+//	{
+//		if (str[i] == 'i')
+//		{
+//			pos_i = i;
+//			break;
+//		}
+//	}
+//
+//	// 만일 'i' 가 없다면 이 수는 실수 뿐이다.
+//	if (pos_i == -1)
+//	{
+//		real = get_number(str, begin, end - 1);
+//		return;
+//	}
+//
+//	// 만일 'i' 가 있다면,  실수부와 허수부를 나누어서 처리하면 된다.
+//	real = get_number(str, begin, pos_i - 1);
+//	img = get_number(str, pos_i + 1, end - 1);
+//
+//	if (pos_i >= 1 && str[pos_i - 1] == '-') img *= -1.0;
+//}
+//double Complex::get_number(const char* str, int from, int to) const
+//{
+//	bool minus = false;
+//	if (from > to) return 0;
+//
+//	if (str[from] == '-') minus = true;
+//	if (str[from] == '-' || str[from] == '+') from++;
+//
+//	double num = 0.0;
+//	double decimal = 1.0;
+//
+//	bool integer_part = true;
+//	for (int i = from; i <= to; i++)
+//
+//		if (isdigit(str[i]) && integer_part)
+//		{
+//			num *= 10.0;
+//			num += (str[i] - '0');
+//		}
+//		else if (str[i] == '.')
+//			integer_part = false;
+//		else if (isdigit(str[i]) && !integer_part)
+//		{
+//			decimal /= 10.0;
+//			num += ((str[i] - '0') * decimal);
+//		}
+//		else
+//			break;  // 그 이외의 이상한 문자들이 올 경우
+//
+//
+//	if (minus) 
+//	{
+//		num *= -1.0;
+//	}
+//	return num;
+//
+//}
+//
+//
+//Complex& Complex::operator=(const Complex& c)
+//{
+//	real = c.real;
+//	img = c.img;
+//	return *this;
+//}
+//
+////std::cout << a; = ostream&operator<<(cout , a )
+//std::ostream& operator<<(std::ostream& os, const Complex& c)
+//{
+//	os << "(" << c.real << " , " << c.img << " ) ";
+//	return os;
+//}
+//
+//int main()
+//{
+//	Complex a(0, 0);
+//	a = "-1.1 + i3.923" + a;
+//	a = a + a;
+//
+//	Complex b(1, 2);
+//	b = a + b;
+//
+//	Complex c(0, 0);
+//	c = a + b + b;
+//
+//	a.println();
+//	b.println();
+//	c.println();
+//
+//	std::cout << "a의 값은 : " << a << "이다 " << std::endl;
+//
+//	mystd::cout << "dwqdqw";
+//}
+
+#include <iostream>
+#include <cstring>
+
+
+class MyString {
+    char* string_content;  // 문자열 데이터를 가리키는 포인터
+    int string_length;     // 문자열 길이
+
+    int memory_capacity;  // 현재 할당된 용량
 
 public:
-	Complex(double real, double img)
-		:real(real), img(img)
-	{}
-	Complex(const Complex& c)
-	{
-		real = c.real;
-		img = c.img;
-	}
+    // 문자 하나로 생성
+    MyString(char c);
 
-	Complex operator+(const Complex& c)const;
-	Complex operator-(const Complex& c)const;
-	Complex operator*(const Complex& c)const;
-	Complex operator/(const Complex& c)const;
+    // 문자열로 부터 생성
+    MyString(const char* str);
 
-	Complex &operator=(const Complex& c);
+    // 복사 생성자
+    MyString(const MyString& str);
 
-	void println()
-	{
-		std::cout << "(" << real << " , " << img << " ) " << std::endl;
-	}
+    ~MyString();
 
-	Complex& operator+=(const Complex& c);
-	Complex& operator-=(const Complex& c);
-	Complex& operator*=(const Complex& c);
-	Complex& operator/=(const Complex& c);
+    int length();
 
-	Complex operator+(const char* str);
+    void print() const;
+    void println() const;
 
-	double get_number(const char* str, int from, int to)const;
+    char& operator[](const int index);
 };
 
-Complex Complex::operator+(const Complex& c)const
-{
-	Complex temp(real + c.real, img + c.img);
-	return temp;
+MyString::MyString(char c) {
+    string_content = new char[1];
+    string_content[0] = c;
+    memory_capacity = 1;
+    string_length = 1;
+}
+MyString::MyString(const char* str) {
+    string_length = strlen(str);
+    memory_capacity = string_length;
+    string_content = new char[string_length];
+
+    for (int i = 0; i != string_length; i++) string_content[i] = str[i];
+}
+MyString::MyString(const MyString& str) {
+    string_length = str.string_length;
+    string_content = new char[string_length];
+
+    for (int i = 0; i != string_length; i++)
+        string_content[i] = str.string_content[i];
+}
+MyString::~MyString() { delete[] string_content; }
+int MyString::length() { return string_length; }
+void MyString::print() const {
+    for (int i = 0; i != string_length; i++) {
+        std::cout << string_content[i];
+    }
+}
+void MyString::println() const {
+    for (int i = 0; i != string_length; i++) {
+        std::cout << string_content[i];
+    }
+    std::cout << std::endl;
 }
 
-Complex Complex::operator-(const Complex& c)const
+char& MyString::operator[](const int index) { return string_content[index]; }
+
+int main() 
 {
-	Complex temp(real - c.real, img - c.img);
-	return temp;
-}
+    MyString str("abcdef");
+    str[3] = 'c';
 
-Complex Complex::operator*(const Complex& c)const
-{
-	Complex temp(real * -c.real, img * c.img);
-	return temp;
-}
-
-Complex Complex::operator/(const Complex& c)const
-{
-	Complex temp(
-		(real * c.real + img * c.img) / (c.real * c.real + c.img * c.img),
-		(img * c.real - real * c.img) / (c.real * c.real + c.img * c.img)
-	);
-	return temp;
-}
-
-Complex& Complex::operator=(const Complex& c)
-{
-	real = c.real;
-	img = c.img;
-	return *this;
-}
-
-Complex& Complex::operator+=(const Complex& c)
-{
-	(*this) = (*this) + c;
-	return *this;
-}
-
-Complex& Complex::operator-=(const Complex& c)
-{
-	(*this) = (*this) - c;
-	return*this;
-}
-
-Complex& Complex::operator*=(const Complex& c) 
-{
-	(*this) = (*this) * c;
-	return *this;
-}
-Complex& Complex::operator/=(const Complex& c) 
-{
-	(*this) = (*this) / c;
-	return *this;
-}
-
-double Complex::get_number(const char* str, int from, int to)const
-{
-	bool minus = false;
-
-	if (from > to)
-		return 0;
-	if (str[from] == '-')
-		minus = true;
-	if (str[from] == '-' || str[from] == '+')
-		from++;
-
-	double num = 0.0;
-	double decimal = 1.0;
-
-	bool integer_part = true;
-	
-	for (int i = from; i <= to; i++)
-	{
-		if (isdigit(str[i]) && integer_part)
-		{
-			num += 10.0;
-			num += (str[i] == '.');
-		}
-		else if (str[i] == '.')
-			integer_part = false;
-		else if (isdigit(str[i]) && !integer_part)
-		{
-			decimal /= 10.0;
-			num += ((str[i] - '0') * decimal);
-		}
-		else
-			break;
-	}
-	if (minus)
-		num *= -1.0;
-
-	return num; 
-}
-
-Complex Complex::operator+(const char* str)
-//입력 받은 문자열을 분석하여 real 부분과 img부분을 찾아야한다 
-//문자열의 꼴은 다음과 같다 "[부호](실수부)[부호]i(허수부)
-//이 때 맨 앞의 부호는 생략 가능( 생략시 +라 가정)
-{
-	int begin = 0, end = strlen(str);
-	double str_img = 0.0, str_real = 0.0;
-
-	//먼저 가장 기준이 되는 'i'의 위치를 찾는다
-
-	int pos_i = -1;
-	for (int i = 0; i != end; i++)
-	{
-		if (str[i] == 'i')
-		{
-			pos_i = i;
-			break;
-		}
-	}
-
-	//만일 'i'가 없다면 이 수는 실수 뿐이다.
-	if (pos_i == -1)
-	{
-		str_real = get_number(str, begin, end - 1);
-
-		Complex temp(str_real, str_img);
-		return(*this) + temp;
-	}
-
-	//만일 'i'가 있다면, 실수와 허수부를 나누어서 처리하면 된다.
-	str_real = get_number(str, begin, pos_i - 1);
-	str_img = get_number(str, pos_i + 1, end - 1);
-
-	if (pos_i > 11 && str[pos_i - 1] == '-')str_img *= -1.0;
-
-	Complex temp(str_real, str_img);
-	return (*this) + temp;
-}
-
-int main()
-{
-	Complex a(1.0, 2.0);
-	Complex b(3.0, -2.0);
-
-	Complex c = a * b;
-
-	c.println();
-
-	a += b;
-	a.println();
-	b.println();
-
-	//Complex a = b; --> 복사생성자 
-	//Complex a; a=b; --> 기본생성자 호출 후 대입 연산자 함수 실행
+    str.println();
 }

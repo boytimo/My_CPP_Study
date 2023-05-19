@@ -988,3 +988,51 @@ using namespace std;
 //	cout << d;
 //}
 
+int fact(int n)
+{
+	int value;
+	if (n <= 1)
+	{
+		cout << "1반환 함수" << endl;
+		cout << "1 반환" << endl;
+		return 1;
+	}
+
+	else
+	{
+		cout << n << " 함수호출" << endl;
+		value = (n * fact(n - 1));
+		cout << n << " 값 반환" << value<<endl;
+		return value;
+	}
+}
+
+int fact2(int n)
+{
+	int i, f = 1;
+	if (n <= 1)
+	{
+		return 1;
+	}
+	else
+	{
+		for (i = n; i > 0; i--)
+		{
+			f = f * i;
+		}
+		return f;
+	}
+}
+
+
+
+int main()
+{
+	int n, result;
+
+	result = fact(4);
+
+	cout << result << endl;
+	
+
+}
