@@ -1196,77 +1196,136 @@
 //
 //	mystd::cout << "dwqdqw";
 //}
+//      //      //      //      //      //      //
+//operator[]
+//#include <iostream>
+//#include <cstring>
+//
+//
+//class MyString {
+//    char* string_content;  // 문자열 데이터를 가리키는 포인터
+//    int string_length;     // 문자열 길이
+//
+//    int memory_capacity;  // 현재 할당된 용량
+//
+//public:
+//    // 문자 하나로 생성
+//    MyString(char c);
+//
+//    // 문자열로 부터 생성
+//    MyString(const char* str);
+//
+//    // 복사 생성자
+//    MyString(const MyString& str);
+//
+//    ~MyString();
+//
+//    int length();
+//
+//    void print() const;
+//    void println() const;
+//
+//    char& operator[](const int index);
+//};
+//
+//MyString::MyString(char c) {
+//    string_content = new char[1];
+//    string_content[0] = c;
+//    memory_capacity = 1;
+//    string_length = 1;
+//}
+//MyString::MyString(const char* str) {
+//    string_length = strlen(str);
+//    memory_capacity = string_length;
+//    string_content = new char[string_length];
+//
+//    for (int i = 0; i != string_length; i++) string_content[i] = str[i];
+//}
+//MyString::MyString(const MyString& str) {
+//    string_length = str.string_length;
+//    string_content = new char[string_length];
+//
+//    for (int i = 0; i != string_length; i++)
+//        string_content[i] = str.string_content[i];
+//}
+//MyString::~MyString() { delete[] string_content; }
+//int MyString::length() { return string_length; }
+//void MyString::print() const {
+//    for (int i = 0; i != string_length; i++) {
+//        std::cout << string_content[i];
+//    }
+//}
+//void MyString::println() const {
+//    for (int i = 0; i != string_length; i++) {
+//        std::cout << string_content[i];
+//    }
+//    std::cout << std::endl;
+//}
+//
+//char& MyString::operator[](const int index) { return string_content[index]; }
+//
+//int main() 
+//{
+//    MyString str("abcdef");
+//    str[3] = 'c';
+//
+//    str.println();
+//}
+//		//		//		//		//		//		//
+// operator ++ 전위,후위 증감 연산자  
+//#include <iostream>
+//
+//class Test
+//{
+//	int m_data;
+//public:
+//	Test(int data) : m_data(data){}
+//	Test(const Test&i) : m_data(i.m_data){}
+//
+//	operator int() { return m_data; }
+//
+//	Test& operator++() //n.operator()++
+//	{
+//		m_data++;
+//		std::cout << "전위 증감 연산자" << std::endl;
+//		return *this;
+//	}
+//
+//	//전위 증감과 후위 증감에 차이를 두기 위해 후임 증가의 경우
+//	//int를 받지만 실제로 아무것도 전달되지 않는다.
+//	Test operator++(int) //++operator(n)
+//	{
+//		Test temp(*this);
+//		m_data++;
+//		std::cout << "후위 증감 연산자" << std::endl;
+//		return temp;
+//	}
+//
+//	int get_m_data()const
+//	{
+//		return m_data;
+//	}
+//
+//};
+//
+//void func(const Test& t)
+//{
+//	std::cout << "x : " << t.get_m_data() << std::endl;
+//}
+//
+//int main()
+//{
+//	Test x = 3;
+//	int a = x + 4;
+//
+//	x = a * 2 + x + 4;
+//	std::cout << x << std::endl;
+//
+//	Test t(3);
+//	func(++t);
+//	func(t++);
+//	std::cout << "x: " << t.get_m_data() << std::endl;
+//
+//}
+//-------------------------------------------------------------------
 
-#include <iostream>
-#include <cstring>
-
-
-class MyString {
-    char* string_content;  // 문자열 데이터를 가리키는 포인터
-    int string_length;     // 문자열 길이
-
-    int memory_capacity;  // 현재 할당된 용량
-
-public:
-    // 문자 하나로 생성
-    MyString(char c);
-
-    // 문자열로 부터 생성
-    MyString(const char* str);
-
-    // 복사 생성자
-    MyString(const MyString& str);
-
-    ~MyString();
-
-    int length();
-
-    void print() const;
-    void println() const;
-
-    char& operator[](const int index);
-};
-
-MyString::MyString(char c) {
-    string_content = new char[1];
-    string_content[0] = c;
-    memory_capacity = 1;
-    string_length = 1;
-}
-MyString::MyString(const char* str) {
-    string_length = strlen(str);
-    memory_capacity = string_length;
-    string_content = new char[string_length];
-
-    for (int i = 0; i != string_length; i++) string_content[i] = str[i];
-}
-MyString::MyString(const MyString& str) {
-    string_length = str.string_length;
-    string_content = new char[string_length];
-
-    for (int i = 0; i != string_length; i++)
-        string_content[i] = str.string_content[i];
-}
-MyString::~MyString() { delete[] string_content; }
-int MyString::length() { return string_length; }
-void MyString::print() const {
-    for (int i = 0; i != string_length; i++) {
-        std::cout << string_content[i];
-    }
-}
-void MyString::println() const {
-    for (int i = 0; i != string_length; i++) {
-        std::cout << string_content[i];
-    }
-    std::cout << std::endl;
-}
-
-char& MyString::operator[](const int index) { return string_content[index]; }
-
-int main() 
-{
-    MyString str("abcdef");
-    str[3] = 'c';
-
-    str.println();
-}

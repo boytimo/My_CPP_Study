@@ -1,3 +1,4 @@
 ﻿  test.cpp
-C:\Users\boyti\Desktop\CPP_study\ex\Test\Test\test.cpp(1031,6): warning C4101: 'n' :참조되지 않은 지역 변수입니다.
+C:\Users\boyti\Desktop\CPP_study\ex\Test\Test\test.cpp(1047,10): warning C4477: 'printf' : 서식 문자열 '%u'에 'unsigned int' 형식의 인수가 필요하지만 variadic 인수 1의 형식이 'int *'입니다.
+C:\Users\boyti\Desktop\CPP_study\ex\Test\Test\test.cpp(1047,10): warning C4313: 'printf': 서식 문자열의 '%u'이(가) int *' 형식의 인수 1과(와) 충돌합니다.
   Test.vcxproj -> C:\Users\boyti\Desktop\CPP_study\ex\Test\x64\Debug\Test.exe
