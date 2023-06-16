@@ -1329,3 +1329,123 @@
 //}
 //-------------------------------------------------------------------
 
+
+//static_cast = 우리가 흔히 생각하는, 언어적 차원에서 지원하는
+//일반적인 타입 반환
+
+//const_cast = 객체의 상수성(const)를 없애는 타입 반환 쉽게 말해
+//const int가 int로 바뀐다.
+
+//dynamic_cast = 파생 클래스 사이에서의 다운 캐스팅
+
+//reinterpret_cast = 위험을 감수하고 하는 캐스팅으로 서로 관련이
+//없는 포인터들 사이의 캐스팅 등
+
+//(원하는 캐스팅 종류)<바꾸려는 타입>(무엇을 바꿀 것인가?)
+#include<iostream>
+class Array
+{
+	const int m_dim;//몇 차원인지
+	int* m_size; //size[0] * size[1] * ...*size[dim -1]짜리 배열
+	
+	struct Address
+	{
+		int level;
+		//맨 마지막 레벨(dim-1레벨)은 데이터 배열을 가리키고
+		//그 위 상위 레벨에서는 다음 address 배열을 가리킨다.
+		void* next;
+	};
+
+	Address* top;
+	//top을 시작으로 N차원 배열을 생성
+
+	//address를 초기화하는 함수. 재귀 호출로 구성되어 있다
+	void initialize_address(Address* current)
+	{
+		if (!current)
+			return;
+
+		if (current->level == m_dim - 1)//종료조건
+		//N-1 레벨의 경우 next에 실제로 보관할 데이터에
+		//해당하는 배열의 시작 주소값
+		{
+			//void *next int*size
+			current->next = new int[m_size[current->level]];
+			return;
+		}
+
+		current->next = new Address[m_size[current->level]];
+
+		for (int i = 0;i != m_size[current->level];i++)
+		{
+			//다음 단계로 넘어가는 과정
+			(static_cast<Address*>(current->next) + i) ->
+				level = current->level+1;
+			//+i는 다음 주소지를 가르키는 말이다
+
+			initialize_address(static_cast<Address*>(current->next) + i);
+		}
+	}
+
+	//생성자는 위에서 아래로
+	//소멸자는 아래에서 위로 
+	void delete_address(Address* current)
+	{
+		if (!current)
+			return;
+		for (int i = 0;current->level < m_dim - 1 && i < m_size[current->level];i++)
+		{
+			delete_address(static_cast<Address*>(current->next) + i);
+		}
+
+		if (current->level == m_dim - 1)
+		{
+			delete[] static_cast<int*>(current->next);
+		}
+		delete[] static_cast<Address*>(current->next);
+	}
+
+public:
+	//dim 차원 수,
+	Array(int dim, int* array_size) :m_dim(dim)
+	{
+		m_size = new int[dim];
+		for (int i = 0;i < dim;i++)
+		{
+			std::cout << array_size[i] << std::endl;
+			m_size[i] = array_size[i];
+		}
+	}
+};
+
+
+
+int main()
+{
+	//int **포인터의 포인터주소 담을 수 있는 변수
+	int** arr[5];
+	arr[0] = new int* [5];
+	for (int i = 0; i < 5;i++)
+		arr[0][i] = new int[10];
+	
+	// 값을 할당하고 출력해봅시다.
+	for (int i = 0; i < 5; i++) {
+		for (int j = 0; j < 10; j++) {
+			arr[0][i][j] = i * j;
+			std::cout << "arr[" << i << "][" << j << "] = " << arr[i][j] << std::endl;
+		}
+	}
+
+	// 메모리 정리
+	for (int i = 0; i < 5; i++)
+		delete[] arr[i];
+	delete[] arr;
+	Array a(2, new int[5]);
+
+	int pnum[5] = { 1,2,3,4,6 };
+
+	int* arr2 = pnum;
+
+	//std::cout << arr2[0][2];
+
+}

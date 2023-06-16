@@ -657,11 +657,12 @@ using namespace std;
 //	myMagic.Use();
 //
 //	cout << "----" << endl;
+//	
 //
 //	Weapon* currentWeapon;
 //	//메인 함수에서 선언과 초기화는 자식 클래스로 하고 그걸 매개 변수로 받는 함수에서
 //	//자식 클래스 여러 종류를 부모클래스의 형으로 매개변수를 받는다.
-//
+//	//virtual 지우면 안됨
 //	currentWeapon = &myWeapon;
 //
 //	currentWeapon->Use();
@@ -692,168 +693,175 @@ using namespace std;
 
 //		//		//		//		//		//		//		//		//		//
 
-//class image
-//{
-//public:
-//	operator string()
-//	{
-//		return "사진";
-//	}
-//};
-//
-//class message
-//{
-//private:
-//	int m_sendtime;
-//	string m_sendname;
-//
-//public:
-//	message(int sendtime, string sendname)
-//	{
-//		m_sendtime = sendtime;
-//		m_sendname = sendname;
-//	}
-//
-//	int getsendtime() const
-//	{
-//		return m_sendtime;
-//	}
-//
-//	string getsendname() const
-//	{
-//		return m_sendname;
-//	}
-//
-//	virtual string getcontent() const
-//	{
-//		return "";
-//	}
-//};
-//
-//class textmessage :public message
-//{
-//private:
-//	string m_text;
-//
-//public:
-//	textmessage(int sendtime, string sendname, string text)
-//		:message(sendtime, sendname),m_text(text)
-//	{}
-//
-//	string gettext() const
-//	{
-//		return m_text;
-//	}
-//
-//	string getcontent() const
-//	{
-//		return m_text;
-//	}
-//};
-//
-//class imagemessage :public message
-//{
-//	//이미지 자체를 동적할당 할 수 있지만, 이미지 안에 클래스에서
-//	//동적할당 된 포인터 얕은 복사는 의미가 없다.
-//
-//private:
-//	image* m_image; //이미지는 용량이 크기 때문에 이미지에 대한 포인터 값만
-//
-//public:
-//	imagemessage(int sendtime, string sendname, image* image)
-//		:message(sendtime, sendname),m_image(image)
-//	{}
-//
-//	image* getimage()const
-//	{
-//		return m_image;
-//	}
-//
-//	string getcontent() const
-//		//함수 옆에 자료형은 리턴 관련
-//	{
-//		return (string)*m_image;
-//		//포인터가 가리키고 있는 객체에 가서 스트링으로 형변환이 된 걸 가져옴
-//	}
-//};
-//
-////void printmessage(textmessage* m)
-////{
-////	cout << "보낸 시간: " << m->getsendtime() << endl;
-////	cout << "보낸 사람:" << m->getsendname() << endl;
-////	cout << "내용:" << m->getcontent() << endl;
-////	cout << endl;
-////}
-//
-//void printmessage(message* m)
+class image
+{
+public:
+	operator string()
+	{
+		return "사진";
+	}
+};
+
+class message
+{
+private:
+	int m_sendtime;
+	string m_sendname;
+
+public:
+	message(int sendtime, string sendname)
+	{
+		m_sendtime = sendtime;
+		m_sendname = sendname;
+	}
+
+	int getsendtime() const
+	{
+		return m_sendtime;
+	}
+
+	string getsendname() const
+	{
+		return m_sendname;
+	}
+
+	virtual string getcontent() const
+	{
+		return "";
+	}
+};
+
+class textmessage :public message
+{
+private:
+	string m_text;
+
+public:
+	textmessage(int sendtime, string sendname, string text)
+		:message(sendtime, sendname),m_text(text)
+	{}
+
+	string gettext() const
+	{
+		return m_text;
+	}
+
+	string getcontent() const
+	{
+		return m_text;
+	}
+};
+
+class imagemessage :public message
+{
+	//이미지 자체를 동적할당 할 수 있지만, 이미지 안에 클래스에서
+	//동적할당 된 포인터 얕은 복사는 의미가 없다.
+
+private:
+	image* m_image; //이미지는 용량이 크기 때문에 이미지에 대한 포인터 값만
+
+public:
+	imagemessage(int sendtime, string sendname, image* image)
+		:message(sendtime, sendname),m_image(image)
+	{}
+
+	image* getimage()const
+	{
+		return m_image;
+	}
+
+	string getcontent() const
+		//함수 옆에 자료형은 리턴 관련
+	{
+		return (string)*m_image;
+		//포인터가 가리키고 있는 객체에 가서 스트링으로 형변환이 된 걸 가져옴
+	}
+};
+
+//void printmessage(textmessage* m)
 //{
 //	cout << "보낸 시간: " << m->getsendtime() << endl;
 //	cout << "보낸 사람:" << m->getsendname() << endl;
 //	cout << "내용:" << m->getcontent() << endl;
 //	cout << endl;
 //}
-//
-///*imagemessage* m*/
-//void printimagemessage(imagemessage* m)
-//{
-//	cout << "보낸 시간: " << m->getsendtime() << endl;
-//	cout << "보낸 사람:" << m->getsendname() << endl;
-//	cout << "내용: " << (string)*m->getimage() << endl;
-//	cout << endl;
-//}
-//
-///*const message &m*/
-//void referenceprint(const message& m)
-//{
-//	cout << "보낸 시간: " << m.getsendtime() << endl;
-//	cout << "보낸 사람:" << m.getsendname() << endl;
-//	cout << "내용:" << m.getcontent() << endl;
-//	cout << endl;
-//}
-//
-///*레퍼런스가 없으면 객체 자체를 넘김*/
-//void referenceprint2(const message m)
-//{
-//	cout << "보낸 시간: " << m.getsendtime() << endl;
-//	cout << "보낸 사람:" << m.getsendname() << endl;
-//	cout << "내용:" << m.getcontent() << endl;
-//	cout << endl;
-//}
-//
-//int main()
-//{
-//	image* p_dogimage = new image();
-//
-//	textmessage *hello = new textmessage(10, "두들", "안녕");
-//	imagemessage *dog = new imagemessage(20, "두들", p_dogimage);
-//
-//	message* messages[] = {
-//		new textmessage(10,"두들","안녕"),
-//		new textmessage(22,"두들","잘가"),
-//		new imagemessage(44,"두들",p_dogimage)
-//	};
-//
-//	for (message* m : messages)
-//	{
-//		referenceprint(*m);
-//	}
-//
-//	cout << (string)*dog->getimage() << endl; //사진
-//	cout << dog->getimage() << endl; //주소 값
-//	cout << endl;
-//
-//	printmessage(hello);
-//	printmessage(dog);
-//	cout << "//		//		//		//		//		//" << endl;
-//	//printimagemessage(hello); 오류 
-//	printimagemessage(dog);
-//	cout << "//		//		//		//		//		//" << endl;
-//	referenceprint(*hello);
-//	referenceprint(*dog);
-//	cout << "//		//		//		//		//		//" << endl;
-//	referenceprint2(*hello); //내용 안 나옴
-//	referenceprint2(*dog);
-//}
+
+void printmessage(message* m)
+{
+	cout << "보낸 시간: " << m->getsendtime() << endl;
+	cout << "보낸 사람:" << m->getsendname() << endl;
+	cout << "내용:" << m->getcontent() << endl;
+	cout << endl;
+}
+
+/*imagemessage* m*/
+void printimagemessage(imagemessage* m)
+{
+	cout << "보낸 시간: " << m->getsendtime() << endl;
+	cout << "보낸 사람:" << m->getsendname() << endl;
+	cout << "내용: " << (string)*m->getimage() << endl;
+	cout << endl;
+}
+
+/*const message &m*/
+void referenceprint(const message& m)
+{
+	cout << "보낸 시간: " << m.getsendtime() << endl;
+	cout << "보낸 사람:" << m.getsendname() << endl;
+	cout << "내용:" << m.getcontent() << endl;
+	cout << endl;
+}
+
+/*레퍼런스가 없으면 객체 자체를 넘김*/
+void referenceprint2(const message m)
+{
+	cout << "보낸 시간: " << m.getsendtime() << endl;
+	cout << "보낸 사람:" << m.getsendname() << endl;
+	cout << "내용:" << m.getcontent() << endl;
+	cout << endl;
+}
+
+int main()
+{
+	image* p_dogimage = new image();
+
+	textmessage *hello = new textmessage(10, "두들", "안녕");
+	imagemessage *dog = new imagemessage(20, "두들", p_dogimage);
+
+	message* messages[] = 
+	{
+		new textmessage(10,"두들","안녕"),
+		new textmessage(22,"두들","잘가"),
+		new imagemessage(44,"두들",p_dogimage)
+	};
+
+	for (message* m : messages)
+	{
+		referenceprint(*m);
+	}
+
+	cout << (string)*dog->getimage() << endl; //사진
+	cout << dog->getimage() << endl; //주소 값
+	cout << endl;
+
+	printmessage(hello);
+	printmessage(dog);
+	cout << "//		//		//		//		//		//" << endl;
+	//printimagemessage(hello); 오류 
+	printimagemessage(dog);
+	cout << "//		//		//		//		//		//" << endl;
+	referenceprint(*hello);
+	referenceprint(*dog);
+	cout << "//		//		//		//		//		//" << endl;
+	referenceprint2(*hello); //내용 안 나옴
+	referenceprint2(*dog);
+
+	int val3 = 5;
+	const int* const ptr3 = &val3;
+	val3 = 6;
+
+
+}
 
 //		//		//		//		//		//		//		//		//
 //레퍼런스와 포인터 
@@ -1037,13 +1045,3 @@ using namespace std;
 //
 //}
 
-int main()
-{
-	int sale[4] = { 157,209,251,312 };
-
-	//
-	for (int i = 0; i < 4; i++)
-	{
-		printf("\n address: %u sale[%d] = %d", &sale[i], i, sale[i]);
-	}
-}
