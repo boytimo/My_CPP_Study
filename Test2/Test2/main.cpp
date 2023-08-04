@@ -776,228 +776,180 @@
 //    else
 //        std::cout << "st2 와 str3 는 다르다" << std::endl;
 //}
+// -----------------------------------------------------------------
+#include<iostream>
+
+#include <iostream>
+
+class Complex {
+private:
+    double real, img;
+
+public:
+    Complex(double real, double img) : real(real), img(img) {}
+    Complex(const Complex& c) { real = c.real, img = c.img; } //복사 생성자
+
+    Complex operator+(const Complex& c) const;
+    Complex operator-(const Complex& c) const;
+    Complex operator*(const Complex& c) const;
+    Complex operator/(const Complex& c) const;
+   // Complex& operator+(const Complex& c);
+    Complex& operator=(const Complex& c);
+
+    Complex& operator+=(const Complex& c);
+    Complex& operator-=(const Complex& c);
+    Complex& operator*=(const Complex& c);
+    Complex& operator/=(const Complex& c);
+    Complex operator+(const char* str);
+
+    double get_number(const char* str, int from, int to)const;
+
+    void println() { std::cout << "( " << real << " , " << img << " ) " << std::endl; }
+};
+
+// a = b + c + b ->  (b.plus(c)).plus(b) b+c -> c가 b에 먼저 들어가면 
+//나중 값이 b+c + b+c 돼버림 
+//Complex &Complex:: operator+(const Complex& c) {
+//    real += c.real;
+//    img += c.img;
+//    return *this;
+//}
+//Complex를 리턴하는 연산자 함수는 값의 복사가 일어나기 때문에 속도저하가 발생하지만 
+//위처럼 레퍼런스를 리턴하게 되면 값의 복사 대신 레퍼런스만 복사하는 것이므로
+//큰 속도 저하는 나타나지 않습니다.
+
+//Complex Complex::operator+(const Complex& c) const {
+//    //클래스 맨 우측 const는 함수 내에 객체 수정 X 
+//    //c의 값에는 어떠한 변화도 주지 않기 때문에 cosnt 붙임 
 // 
-//#include<iostream>
-//
-//class Complex
-//{
-//private:
-//	double real, img; //real 실수, img 허수부
-//	double get_number(const char* str, int from, int to)const;
-//
-//public:
-//	Complex(double real, double img)
-//		:real(real), img(img)
-//	{}
-//	Complex(const Complex& c)
-//	{
-//		real = c.real;
-//		img = c.img;
-//	}
-//	Complex(const char* str);
-//
-//	Complex operator+(const Complex& c)const;
-//	Complex operator-(const Complex& c)const;
-//	Complex operator*(const Complex& c)const;
-//	Complex operator/(const Complex& c)const;
-//
-//	Complex &operator=(const Complex& c);
-//
-//	void println()
-//	{
-//		std::cout << "(" << real << " , " << img << " ) " << std::endl;
-//	}
-//
-//	Complex& operator+=(const Complex& c);
-//	Complex& operator-=(const Complex& c);
-//	Complex& operator*=(const Complex& c);
-//	Complex& operator/=(const Complex& c);
-//
-//	Complex operator+(const char*str)const;
-//	Complex operator-(const char* str)const;
-//	Complex operator*(const char* str)const;
-//	Complex operator/(const char* str)const;
-//	
-//};
-//
-//Complex Complex::operator+(const Complex& c)const
-//{
-//	Complex temp(real + c.real, img + c.img);
-//	return temp;
+//    Complex temp(real + c.real, img + c.img);
+//    return temp;
 //}
-//
-//Complex Complex::operator-(const Complex& c)const
-//{
-//	Complex temp(real - c.real, img - c.img);
-//	return temp;
-//}
-//
-//Complex Complex::operator*(const Complex& c)const
-//{
-//	Complex temp(real * c.real - img * c.img, real * c.img + img * c.real);
-//	return temp;
-//}
-//
-//Complex Complex::operator/(const Complex& c)const
-//{
-//	Complex temp(
-//		(real * c.real + img * c.img) / (c.real * c.real + c.img * c.img),
-//		(img * c.real - real * c.img) / (c.real * c.real + c.img * c.img));
-//	return temp;
-//}
-//
-//Complex& Complex::operator=(const Complex& c)
-//{
-//	real = c.real;
-//	img = c.img;
-//	return *this;
-//}
-//
-//Complex& Complex::operator+=(const Complex& c)
-//{
-//	(*this) = (*this) + c;
-//	return *this;
-//}
-//
-//Complex& Complex::operator-=(const Complex& c)
-//{
-//	(*this) = (*this) - c;
-//	return*this;
-//}
-//
-//Complex& Complex::operator*=(const Complex& c) 
-//{
-//	(*this) = (*this) * c;
-//	return *this;
-//}
-//Complex& Complex::operator/=(const Complex& c) 
-//{
-//	(*this) = (*this) / c;
-//	return *this;
-//}
-//
-//double Complex::get_number(const char* str, int from, int to)const
-//{
-//	bool minus = false;
-//
-//	if (from > to)
-//		return 0;
-//	if (str[from] == '-')
-//		minus = true;
-//	if (str[from] == '-' || str[from] == '+')
-//		from++;
-//
-//	double num = 0.0;
-//	double decimal = 1.0;
-//
-//	bool integer_part = true;
-//	
-//	for (int i = from; i <= to; i++)
-//	{
-//		if (isdigit(str[i]) && integer_part)
-//		{
-//			num += 10.0;
-//			num += (str[i] == '.');
-//		}
-//		else if (str[i] == '.')
-//			integer_part = false;
-//		else if (isdigit(str[i]) && !integer_part)
-//		{
-//			decimal /= 10.0;
-//			num += ((str[i] - '0') * decimal);
-//			//ASCII 테이블 상에서 0 부터 9 까지 숫자들이 크기 순으로 연속적으로 배열되어 있기 때문에 단순히 '0' 을 빼버리면
-//			//그 숫자에 해당하는 실제 정수 값을 구할 수 있게 됩니다.
-//		}
-//		else
-//			break;
-//	}
-//	if (minus)
-//		num *= -1.0;
-//
-//	return num; 
-//}
-//
-//Complex::Complex(const char* str)
-////입력 받은 문자열을 분석하여 real 부분과 img부분을 찾아야한다 
-////문자열의 꼴은 다음과 같다 "[부호](실수부)[부호]i(허수부)
-////이 때 맨 앞의 부호는 생략 가능( 생략시 +라 가정)
-//{
-//
-//	int begin = 0, end = strlen(str);
-//	img = 0.0;
-//	real = 0.0;
-//
-//	// 먼저 가장 기준이 되는 'i' 의 위치를 찾는다.
-//	int pos_i = -1;
-//	for (int i = 0; i != end; i++) {
-//		if (str[i] == 'i') {
-//			pos_i = i;
-//			break;
-//		}
-//	}
-//
-//	// 만일 'i' 가 없다면 이 수는 실수 뿐이다.
-//	if (pos_i == -1) {
-//		real = get_number(str, begin, end - 1);
-//		return;
-//	}
-//
-//	// 만일 'i' 가 있다면,  실수부와 허수부를 나누어서 처리하면 된다.
-//	real = get_number(str, begin, pos_i - 1);
-//	img = get_number(str, pos_i + 1, end - 1);
-//
-//	if (pos_i >= 1 && str[pos_i - 1] == '-') img *= -1.0;
-//}
-//
-//Complex Complex::operator+(const char* str) const 
-//{
-//	Complex temp(str);
-//	return (*this) + temp;
-//}
-//Complex Complex::operator-(const char* str) const 
-//{
-//	Complex temp(str);
-//	return (*this) - temp;
-//}
-//Complex Complex::operator*(const char* str) const 
-//{
-//	Complex temp(str);
-//	return (*this) * temp;
-//}
-//Complex Complex::operator/(const char* str) const 
-//{
-//	Complex temp(str);
-//	return (*this) / temp;
-//}
-//int main()
-//{
-//	Complex a(1.0, 2.0);
-//	Complex b(3.0, -2.0);
-//
-//	Complex c = a * b;
-//
-//	c.println();
-//
-//	int d = '1';
-//	std::cout << d << std::endl;
-//
-//	//a += b;
-//	//a.println();
-//	//b.println();
-//
-//	//Complex a = b; --> 복사생성자 
-//	//Complex a; a=b; --> 기본생성자 호출 후 대입 연산자 함수 실행
-//
-//	//Complex a(0, 0);
-//	//a = a + "-1.1 + i3.923";
-//	//a.println();
-//	//a = a - "1.2 -i1.823";
-//	//a.println();
-//	//a = a * "2.3+i22";
-//	//a.println();
-//	//a = a / "-12+i55";
-//	//a.println();
-//}
+double Complex::get_number(const char* str, int from, int to) const {
+    bool minus = false;
+    if (from > to) return 0;
+
+    if (str[from] == '-') 
+        minus = true;
+    if (str[from] == '-' || str[from] == '+') 
+        from++;
+
+    double num = 0.0;
+    double decimal = 1.0;
+
+    bool integer_part = true;
+    for (int i = from; i <= to; i++) {
+        if (isdigit(str[i]) && integer_part) {
+            num *= 10.0;
+            num += (str[i] - '0');
+        }
+        else if (str[i] == '.')
+            integer_part = false;
+        else if (isdigit(str[i]) && !integer_part) {
+            decimal /= 10.0;
+            num += ((str[i] - '0') * decimal);
+        }
+        else
+            break;  // 그 이외의 이상한 문자들이 올 경우
+    }
+
+    if (minus) num *= -1.0;
+
+    return num;
+}
+
+Complex Complex::operator+(const char* str) {
+    // 입력 받은 문자열을 분석하여 real 부분과 img 부분을 찾아야 한다.
+    // 문자열의 꼴은 다음과 같습니다 "[부호](실수부)(부호)i(허수부)"
+    // 이 때 맨 앞의 부호는 생략 가능합니다. (생략시 + 라 가정)
+
+    int begin = 0, end = strlen(str);
+    double str_img = 0.0, str_real = 0.0;
+
+    // 먼저 가장 기준이 되는 'i' 의 위치를 찾는다.
+    int pos_i = -1;
+    for (int i = 0; i != end; i++) {
+        if (str[i] == 'i') {
+            pos_i = i;
+            break;
+        }
+    }
+
+    // 만일 'i' 가 없다면 이 수는 실수 뿐이다.
+    if (pos_i == -1) {
+        str_real = get_number(str, begin, end - 1);
+
+        Complex temp(str_real, str_img);
+        return (*this) + temp;
+    }
+
+    // 만일 'i' 가 있다면,  실수부와 허수부를 나누어서 처리하면 된다.
+    str_real = get_number(str, begin, pos_i - 1);
+    str_img = get_number(str, pos_i + 1, end - 1);
+
+    if (pos_i >= 1 && str[pos_i - 1] == '-') 
+        str_img *= -1.0;
+
+    Complex temp(str_real, str_img);
+    return (*this) + temp;
+}
+
+
+
+Complex Complex::operator-(const Complex& c) const {
+    Complex temp(real - c.real, img - c.img);
+    return temp;
+}
+Complex Complex::operator*(const Complex& c) const {
+    Complex temp(real * c.real - img * c.img, real * c.img + img * c.real);
+    return temp;
+}
+Complex Complex::operator/(const Complex& c) const {
+    Complex temp(
+        (real * c.real + img * c.img) / (c.real * c.real + c.img * c.img),
+        (img * c.real - real * c.img) / (c.real * c.real + c.img * c.img));
+    return temp;
+}
+
+Complex& Complex::operator+=(const Complex& c) {
+    (*this) = (*this) + c; //클래스 내부 operator+ 실행
+    return *this;
+}
+Complex& Complex::operator-=(const Complex& c) {
+    (*this) = (*this) - c;
+    return *this;
+}
+Complex& Complex::operator*=(const Complex& c) {
+    (*this) = (*this) * c;
+    return *this;
+}
+Complex& Complex::operator/=(const Complex& c) {
+    (*this) = (*this) / c;
+    return *this;
+}
+
+
+
+Complex& Complex::operator=(const Complex& c)
+//Complex 타입을 리턴하지 않고 굳이 
+//Complex& 타입을 리턴하냐면, 대입 연산 이후 불필요한 복사를 방지하기 위해서
+
+//= 를 만들지 않더라도, 위 소스를 컴파일 하면 잘 작동함.
+//컴파일러 차원에서 디폴트 대입 연사자를 지원하고 있기 때문.
+//디폴트 복사 생성자와 마찬가지로 디폴트 대입 연산자는 역시 얕은 복사를 수행함.
+{
+    real = c.real;
+    img = c.img;
+    return *this;
+}
+
+int main() {
+    Complex a(1.0, 2.0);
+    Complex b(3.0, -2.0);
+    a -= b;
+    a.println();
+    b.println();
+}
 
 //-----------------------------------------------------------------------------////friend 다른 클래스가 private에 접근 할 수 있게 하는 함수
 
@@ -1329,3 +1281,312 @@
 //}
 //-------------------------------------------------------------------
 
+//#include <stdio.h>
+//#include <stdlib.h>
+//#include <iostream>
+//
+//struct test
+//{
+//    int m_test;
+//    double m_double;
+//    struct test* next;
+//};
+//struct test* test1 = NULL;
+//struct test* test2 = NULL;
+//
+//
+//void test(struct test* node)
+//{
+//    test2 = test1 = node;
+//    test1->next = node;
+//}
+//
+//struct test* new_test(int a, double b)
+//{
+//    struct test* test = (struct test*)malloc(sizeof(struct test));
+//    test->m_test = a;
+//    test->m_double = b;
+//    test->next = NULL;
+//    return test;
+//}
+//
+//
+////포인터를 사용해서 자기 자신과 같은 타입의 다른 객체를 가리키는 방식을 "재귀적 자료"
+//struct node
+//{
+//    int m_data;
+//    //    1 (root )
+//    //    ^
+//    //   2 3 (root->left root->right)
+//    struct node* left;
+//    struct node* right;
+//};
+//
+//struct queue
+//{
+//    struct node* q_data; //이진 트리의 노드에 대한 포인터
+//    struct queue* next; //큐의 다음 노드에 대한 포인터, 이 포인터를 통해 큐의 여러 노드들을 연결하여 구현
+//    //FIFO First-In, First-Out
+//};
+//
+//
+////각각 큐의 앞과 뒤를 가리키는 포인터
+//
+//struct queue* front = NULL;//큐에서 노드를 꺼낼 위치
+//struct queue* rear = NULL;//새로운 노드가 추가될 위치
+//
+//
+//
+////BFS는 루트 노드로 부터 시작해서 가장 가까운 레벨의 노드들을 먼저 탐색하고 그 다음 레벨의 노드들을 탐색하는 방식.
+////이를 위해 먼저 탐색해야할 노드들을 큐에 저장, 큐에서 노드를 하나씩 꺼내서 노드의 자식들을 다시 큐에 넣는 과정 반복
+//
+//
+//
+//struct node* new_node(int data)
+//{
+//    //node* node = new mod[sizeof]
+//    struct node* node = new struct node;
+//    node->m_data = data;
+//    node->left = NULL;
+//    node->right = NULL;
+//    return node;
+//}
+//
+//void dequeue() 
+//{
+//    struct queue* temp = front;
+//
+//    if (front == NULL) return;
+//    if (front == rear) 
+//    { 
+//        front = rear = NULL;
+//    }
+//    else 
+//    { 
+//        front = front->next;  
+//    }
+//    
+//    free(temp); //front에 front -> next 넣고 front 동적할당 제거
+//}
+//
+//void enqueue(struct node* node) 
+//{
+//    struct queue* temp = new struct queue;
+//    temp->q_data = node; //q_data / 이진 트리의 노드에 대한 포인터
+//
+//    temp->next = NULL;
+//
+//    if (front == NULL && rear == NULL)
+//    {
+//        
+//        front = rear = temp;
+//       
+//        return;
+//    }   
+//
+//    if (rear->q_data->m_data != 7) //rear과 front는 무조건 관련 있음
+//    {
+//        rear->next = temp; 
+//
+//        rear = temp;
+//        printf("========\n");
+//    }
+//   //std::cout << rear->q_data << "ssss new" << std::
+//}
+//
+//
+//void BFS(struct node* root)
+//{
+//    if (root == NULL) return;
+//
+//    enqueue(root);
+//
+//    while (front != NULL) //front = 큐에서 노드를 꺼낼 위치
+//    {
+//        struct node* node = front->q_data;
+//        //printf("%d ", node->m_data);
+//
+//        printf("%d front\n", front->q_data->m_data);
+//
+//        //std::cout << rear->q_data->m_data << "rear " << std::endl;
+//
+//        if (node->left != NULL)
+//        {
+//            enqueue(node->left);
+//            printf("%d \n", node->left->m_data);
+//        }
+//        if (node->right != NULL)
+//        {
+//            enqueue(node->right);
+//            printf("%d \n", node->right->m_data);
+//        }
+//        dequeue();
+//    }
+//}
+//
+//int main()
+//{
+//    struct node* root;
+//
+//    root = new_node(1);
+//
+//    root->left = new_node(2); //return(node) node *left
+//    root->right = new_node(3);
+//    root->left->left = new_node(4);
+//    root->left->right = new_node(5);
+//    root->right->left = new_node(6);
+//    root->right->right = new_node(7);
+//    printf("Breadth-First Search: \n");
+//    BFS(root);
+//
+//
+//    //struct test* root;
+//    //root = new_test(1, 5);
+//    //test(root);
+//    //std::cout<<test2->m_double;
+//
+//
+//    return 0;
+//}
+// ---------------------------------------------------------------------------------------------------------
+//#include<iostream>
+//
+////static_cast : 우리가 흔히 생각하는, 언어적 차원에서 지원하는 일반적인 타입 변환
+////
+////const_cast : 객체의 상수성(const) 를 없애는 타입 변환.쉽게 말해 const int 가 int 로 바뀐다.
+////
+////dynamic_cast : 파생 클래스 사이에서의 다운 캐스팅(→ 정확한 의미는 나중에 다시 배울 것입니다)
+////
+////reinterpret_cast : 위험을 감수하고 하는 캐스팅으로 서로 관련이 없는 포인터들 사이의 캐스팅 등
+//
+////원하는 캐스팅 종류<바꾸려는 타입>(무엇을 바꿀 것인가?)
+//class Array
+//{
+//	const int m_dim; // 몇 차원 배열인지
+//	//Address 배열의 레벨(m_dim-1)이면 재귀호출 종료
+//
+//	int* p_size; //p_size[0] * p_size[1] * ... * p_size[dim-1] 짜리 배열.
+//
+//	struct Address //c++ 구조체는 모든 멤버함수 ,변수 디폴트로 -> public 
+//	{
+//		int level;
+//		//맨 마지막 레벨은 데이터 배열을 가리킴 
+//		//그 위 레벨에서는 다음 address 배열을 가리킴
+//		void* next;
+//	};
+//
+//	Address* top;
+//
+//public:
+//	Array(int dim, int* array_size) :m_dim(dim)
+//	{
+//		//3 {3,4,5}
+//		p_size = new int[dim];
+//		for (int i = 0; i < dim; i++)
+//		{
+//			p_size[i] = array_size[i];
+//		}
+//
+//		top = new Address;
+//		top->level = 0;
+//
+//		initialize_address(top);
+//	}
+//
+//	Array(const Array& arr) :m_dim(arr.m_dim)
+//	{
+//		p_size = new int[m_dim];
+//		for (int i = 0; i < m_dim; i++)
+//			p_size[i] = arr.p_size[i];
+//
+//		top = new Address;
+//		top->level = 0;
+//
+//		initialize_address(top);
+//		//내용물 복사
+//		copy_address(top, arr.top);
+//
+//	}
+//	
+//	void copy_address(Address* dst, Address* src)
+//	{
+//		if (dst->level == m_dim - 1)
+//		{
+//			for (int i = 0; i < p_size[dst->level]; i++)
+//			{
+//				static_cast<int*>(dst->next)[i] = static_cast<int*>(src->next)[i];
+//				return;
+//			}
+//		}
+//		for (int i = 0; i != p_size[dst->level]; i++)
+//		{
+//			Address *new_dst = static_cast<Address*>(dst->next) + i;
+//			Address* new_src = static_cast<Address*>(src->next) + i;
+//
+//			copy_address(new_dst, new_src);
+//		}
+//	}
+//
+//	~Array()
+//	{
+//		std::cout << std::endl;
+//
+//		delete_address(top);
+//		delete[] p_size;
+//	}
+//
+//	void initialize_address(Address* current)
+//	{
+//		if (!current)
+//			return;
+//		if (current->level == m_dim - 1) //종료조건
+//		{
+//			current->next = new int[p_size[current->level]];
+//			std::cout << current->level << std::endl;
+//			return;
+//		}
+//		current->next = new Address[p_size[current->level]];
+//		//현재 구조체 next에 Address 배열 3개 생성
+//		
+//		for (int i = 0; i != p_size[current->level]; i++)//다음 단계로 넘어가는 과정
+//		{
+//			std::cout << current->level << std::endl;
+//
+//			( static_cast<Address*>(current->next) + i)->level = current->level + 1;
+//			//ex) (current->next)+1 ==  변수이름X(current->next)[1]
+//			
+//			initialize_address( static_cast<Address*>(current->next) + i);
+//		}
+//	}
+//
+//	void delete_address(Address* current) //소멸자는 아래서 위로 
+//	{
+//
+//		if (!current)
+//			return;
+//		for (int i = 0; current->level < m_dim - 1 && i < p_size[current->level]; i++)
+//		{//2 2 
+//			//std::cout << i<< std::endl;
+//
+//			delete_address(static_cast<Address*>(current->next) + i);
+//		}
+//		std::cout << current->level << std::endl;
+//
+//		if (current->level == m_dim - 1)
+//		{
+//			std::cout << "delete" << std::endl;
+//			delete[] static_cast<int*>(current->next); //제거한 다음에 어떻게 해
+//			//delete[] static_cast<Address*>(current);
+//		}
+//		//delete[] static_cast<Address*>(current->next);
+//	}
+//};
+//
+//int main()
+//{
+//	//(차원 수, 
+//	int array[3] = { 2,2,1 }; //[3][4][5]
+//
+//	Array a(3, array);
+//	//Array b(a);
+//}
