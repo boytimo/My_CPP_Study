@@ -41,6 +41,17 @@ Account::Account(Account& acc)
     delete[] m_name;
 }
 
+ Account& Account::operator=(const Account& ref) //oop8
+ {
+     m_id = ref.m_id;
+     m_money = ref.m_money;
+     int i = len(ref.m_name);
+     for (int j = 0; j < i; j++)
+     {
+         m_name[i] = ref.m_name[i];
+     }
+ }
+
 int Account::len(const char* str)const
 {
     int i = 0;

@@ -4171,133 +4171,138 @@
 //=======================================================
 
 
-using namespace std;
-#include <cstdlib>
-//이 문제를 통해 깨달은 점
-// BoundCheck2DIntArray arr2d(n,m)
-//arr2d[n][m] = n + m;가 있으면
-//operator 순서는 arr2d.operator[](int n) arr2d 객체 리턴->
-//arr2d.operator[](int m) arr2d객체 리턴->
-// arr2d.operator=(int n+m) arr2d객체 리턴 -> 값 도출
+//using namespace std;
+//#include <cstdlib>
+////이 문제를 통해 깨달은 점
+//// BoundCheck2DIntArray arr2d(n,m)
+////arr2d[n][m] = n + m;가 있으면
+////operator 순서는 arr2d.operator[](int n) arr2d 객체 리턴->
+////arr2d.operator[](int m) arr2d객체 리턴->
+//// arr2d.operator=(int n+m) arr2d객체 리턴 -> 값 도출
+//
+////두 개의 [] 연산자를 동시에 오버로딩 하는 것은 허용 X
+//// arr2d[n][m] 두 번의 []연산자 호출을 동반하게끔 구현해야한다.
+////첫 번째[]연산에 의해서 위의 문장은 다음과 같이 해석
+////(arr2d.operator[](n))[m];
+////그리고 arr2d.operator[](n) 연산의 반환 값을 이용해서 두 번째 [] 연산은 다음과 같이 해석
+//// ((반환 값).operator[])(m);
+//
+//
+//
+//class BoundCheck2DIntArray
+//{
+//private:
+//	int** arr; //클래스 형 멤버변수는 포인터로 설정
+//	int arrlenX; //배열 길이 측정
+//	int arrlenY;
+//	int m_x; //리턴값 좌표 측정
+//	int m_y;
+//	bool dimention;
+//
+//	BoundCheck2DIntArray& operator =(const BoundCheck2DIntArray& arr2);
+//	BoundCheck2DIntArray(const BoundCheck2DIntArray& arr2);
+//public:
+//	BoundCheck2DIntArray(int x, int y) :arrlenX(x), arrlenY(y), dimention(true) // 3 4
+//	{
+//		arr = new int* [x]; // 0 1 2
+//		for (int i = 0; i < x; i++)
+//		{
+//			arr[i] = new int[y];// 0 1 2 3
+//		}
+//		
+//	}
+//
+//	BoundCheck2DIntArray& operator[](const int idx)
+//	{
+//
+//		if (dimention)
+//		{
+//			//cout << idx << endl;
+//			if (idx < 0 || idx >= arrlenX) //배열 범위 설정
+//			{
+//				cout << "Array index out of bound exception" << endl;
+//				exit(1);
+//			}
+//			else
+//			{
+//				dimention = false;
+//				m_x = idx;
+//
+//				return *this;
+//			}
+//		}
+//		else
+//		{
+//			//cout << idx <<"Y" << endl;
+//			if (idx < 0 || idx >= arrlenY)
+//			{
+//				cout << "Array index out of bound exception" << endl;
+//				exit(1);
+//			}
+//			else
+//			{
+//				dimention = true;
+//				m_y = idx;
+//				return *this;
+//			}
+//		}
+//
+//		//		arr2d[n][m] = n + m; //(arr2d.operator[](n))[m];   (반환 값).operator[](m);
+//	}
+//
+//	BoundCheck2DIntArray & operator=(const int num)
+//	{
+//		arr[m_x][m_y] = num;
+//		return *this;
+//	}
+//
+//	~BoundCheck2DIntArray()
+//	{
+//		// 각 int 포인터가 가리키는 메모리 해제
+//		for (int i = 0; i < arrlenX; i++) { //arrlenX = 3 
+//			delete[] arr[i];
+//		}
+//
+//		// 포인터 배열에 대한 메모리 해제
+//		delete arr;
+//	}
+//
+//	friend std::ostream& operator<<(std::ostream& os, BoundCheck2DIntArray& arr2);
+//};
+//
+//std::ostream& operator<<(std::ostream& os, BoundCheck2DIntArray& arr2)
+//{
+//	os << arr2.arr[arr2.m_x][arr2.m_y];
+//	return os;
+//}
+//
+//
+//
+//int main()
+//{
+//	cout << "---------------------------" << endl;
+//	BoundCheck2DIntArray arr2d(3, 4);
+//
+//	for (int n = 0; n < 3; n++)
+//	{
+//		for (int m = 0; m < 4; m++)
+//		{
+//			arr2d[n][m] = n + m;
+//		}
+//	}
+//
+//	for (int n = 0; n < 3; n++)
+//	{
+//		for (int m = 0; m < 4; m++)
+//		{
+//			cout << arr2d[n][m] << ' '; //cout << *this
+//		}
+//		cout << endl;
+//	}
+//
+//}
 
-//두 개의 [] 연산자를 동시에 오버로딩 하는 것은 허용 X
-// arr2d[n][m] 두 번의 []연산자 호출을 동반하게끔 구현해야한다.
-//첫 번째[]연산에 의해서 위의 문장은 다음과 같이 해석
-//(arr2d.operator[](n))[m];
-//그리고 arr2d.operator[](n) 연산의 반환 값을 이용해서 두 번째 [] 연산은 다음과 같이 해석
-// ((반환 값).operator[])(m);
+//===================================================
 
 
 
-class BoundCheck2DIntArray
-{
-private:
-	int** arr; //클래스 형 멤버변수는 포인터로 설정
-	int arrlenX; //배열 길이 측정
-	int arrlenY;
-	int m_x; //리턴값 좌표 측정
-	int m_y;
-	bool dimention;
-
-	BoundCheck2DIntArray& operator =(const BoundCheck2DIntArray& arr2);
-	BoundCheck2DIntArray(const BoundCheck2DIntArray& arr2);
-public:
-	BoundCheck2DIntArray(int x, int y) :arrlenX(x), arrlenY(y), dimention(true) // 3 4
-	{
-		arr = new int* [x]; // 0 1 2
-		for (int i = 0; i < x; i++)
-		{
-			arr[i] = new int[y];// 0 1 2 3
-		}
-		
-	}
-
-	BoundCheck2DIntArray& operator[](const int idx)
-	{
-
-		if (dimention)
-		{
-			//cout << idx << endl;
-			if (idx < 0 || idx >= arrlenX)
-			{
-				cout << "Array index out of bound exception" << endl;
-				exit(1);
-			}
-			else
-			{
-				dimention = false;
-				m_x = idx;
-
-				return *this;
-			}
-		}
-		else
-		{
-			//cout << idx <<"Y" << endl;
-			if (idx < 0 || idx >= arrlenY)
-			{
-				cout << "Array index out of bound exception" << endl;
-				exit(1);
-			}
-			else
-			{
-				dimention = true;
-				m_y = idx;
-				return *this;
-			}
-		}
-
-		//		arr2d[n][m] = n + m; //(arr2d.operator[](n))[m];   (반환 값).operator[](m);
-	}
-
-	BoundCheck2DIntArray & operator=(const int num)
-	{
-		arr[m_x][m_y] = num;
-		return *this;
-	}
-
-	~BoundCheck2DIntArray()
-	{
-		// 각 int 포인터가 가리키는 메모리 해제
-		for (int i = 0; i < arrlenX; i++) { //arrlenX = 3 
-			delete[] arr[i];
-		}
-
-		// 포인터 배열에 대한 메모리 해제
-		delete arr;
-	}
-
-	friend std::ostream& operator<<(std::ostream& os, BoundCheck2DIntArray& arr2);
-};
-
-std::ostream& operator<<(std::ostream& os, BoundCheck2DIntArray& arr2)
-{
-	os << arr2.arr[arr2.m_x][arr2.m_y];
-	return os;
-}
-
-
-
-int main()
-{
-	cout << "---------------------------" << endl;
-	BoundCheck2DIntArray arr2d(3, 4);
-
-	for (int n = 0; n < 3; n++)
-	{
-		for (int m = 0; m < 4; m++)
-		{
-			arr2d[n][m] = n + m;
-		}
-	}
-
-	for (int n = 0; n < 3; n++)
-	{
-		for (int m = 0; m < 4; m++)
-		{
-			cout << arr2d[n][m] << ' '; //cout << *this
-		}
-		cout << endl;
-	}
-
-}

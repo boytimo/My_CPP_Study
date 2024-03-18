@@ -8,6 +8,11 @@
 //BankingCommon.h -> 공통헤더 및 상수 선언
 //BankingSystemMain.cpp -> main 함수 정의
 
+//OOP 8단계
+//1. Account.h Account.cpp 대입 연산자 정의
+//2. AccountHandler.h BoundCheckPointPtrArray 클래스의 사용
+//3. AccountArray.h, AccountArray.cpp 배열 클래스의 선언과 정의
+
 //int main(void)
 //{
 //    int num = 0;

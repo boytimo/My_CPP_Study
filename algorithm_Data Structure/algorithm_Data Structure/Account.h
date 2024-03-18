@@ -18,8 +18,9 @@ public:
 
     virtual ~Account();
 
-    int len(const char* str)const;
+    Account& operator=(const Account& ref);
 
+    int len(const char* str)const;
 
     virtual void print()const;
 

@@ -130,6 +130,7 @@
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="AccountHandlr.cpp" />
     <ClCompile Include="BankingSystemMain.cpp" />
+    <ClCompile Include="AccountArray.cpp" />
     <ClCompile Include="NameSp.cpp" />
     <ClCompile Include="study.cpp" />
   </ItemGroup>
@@ -137,6 +138,7 @@
     <ClInclude Include="Account.h" />
     <ClInclude Include="AccountHandlr.h" />
     <ClInclude Include="BankingCommon.h" />
+    <ClInclude Include="AccountArray.h" />
     <ClInclude Include="HighCreditAccout.h" />
     <ClInclude Include="NameSp.h" />
     <ClInclude Include="NormalAccount.h" />

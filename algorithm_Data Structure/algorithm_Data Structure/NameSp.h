@@ -1,20 +1,20 @@
-#pragma once
-#include<iostream>
-//識情
-
-namespace BestComImp1
-{
-	void SimpleFunc(void);
-}
-
-namespace BestComImp1
-{
-	void PrettyFunc(void);
-}
-
-
-
-namespace ProgComImp1
-{
-	void SimpleFunc(void);
-}
+//#pragma once
+//#include<iostream>
+////識情
+//
+//namespace BestComImp1
+//{
+//	void SimpleFunc(void);
+//}
+//
+//namespace BestComImp1
+//{
+//	void PrettyFunc(void);
+//}
+//
+//
+//
+//namespace ProgComImp1
+//{
+//	void SimpleFunc(void);
+//}
