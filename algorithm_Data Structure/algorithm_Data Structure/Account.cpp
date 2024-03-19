@@ -50,6 +50,8 @@ Account::Account(Account& acc)
      {
          m_name[i] = ref.m_name[i];
      }
+
+     return *this;
  }
 
 int Account::len(const char* str)const
