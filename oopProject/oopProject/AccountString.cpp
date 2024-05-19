@@ -2,18 +2,43 @@
 
 String::String()
 {
+	std::cout << "String()" << std::endl;
 	m_len = 0;
-	m_str = NULL; //필자가 작성
+	m_str = NULL; 
 }
 
 String::String(const char* xstr)
 {
+	std::cout << "String(const char * xstr)" << std::endl;
+
 	m_len = makeLen(xstr);
-	std::cout << m_len << " m_len" << std::endl;
+	
 	m_str = new char[m_len];
 	for (int i = 0; i < m_len; i++)
 	{
 		m_str[i] = xstr[i];
+	}
+
+}
+
+String::String(const String& xstr) //복사 생성자 호출 안해서 내 코드가 오류 났었음
+{
+	std::cout << "String(const String &xstr) " << std::endl;
+
+	//왜 m_str이 NULL이 아닐까?
+	if(m_str != NULL) //생성자라 필요 없음 이거 호출 되서 오류
+	{
+		std::cout << "m_str !_ NULL  " ;
+		std::cout << m_len << std::endl;
+	}
+
+	m_len = xstr.m_len;
+
+	m_str = new char[m_len];
+
+	for (int i = 0; i < m_len; i++)
+	{
+		m_str[i] = xstr.m_str[i];
 	}
 
 }
@@ -28,7 +53,7 @@ String::~String()
 
 String& String::operator=(const String& xstr)
 {
-	//std::cout << "operator = " << std::endl;
+	std::cout << "operator = " << std::endl;
 
 	if (xstr.m_str != NULL)
 	{
@@ -225,13 +250,14 @@ std::istream& operator>>(std::istream& is, String& xstr)
 	char a[100];
 	is >> a;
 	std::cout << a << " operator >>" << std::endl;
-	String temps(a); //-> 오류
-	xstr = temps;
-	
-	//String &temps = xstr; // -> 오류
-	//temps = a;
 
-	//xstr = String(a);
+	//String temps(a); //String::String(const char* xstr)
+	//xstr = temps; //operator = 
+	
+	//String &temps = xstr; //String::String(const char* xstr)
+	//temps = a; //operator = 
+
+	xstr = String(a); //String::String(const char* xstr) //operator = 
 
 	return is;
 }

@@ -12,6 +12,8 @@ public:
 
 	String(const char* xstr);
 
+	String(const String& xstr);
+
 	~String();
 
 	String& operator=(const String& xstr);
@@ -24,10 +26,8 @@ public:
 	
 	String& operator +=(const String& xstr);//A += B
 
-
 	void deleteIndex();
 	
-
 	int makeLen(const char* xstr);
 
 	friend std::ostream& operator<<(std::ostream& os, const String& xstr);

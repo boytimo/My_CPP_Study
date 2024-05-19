@@ -140,6 +140,7 @@
     <ClInclude Include="AccountHandlr.h" />
     <ClInclude Include="AccountString.h" />
     <ClInclude Include="BankingCommon.h" />
+    <ClInclude Include="BankingCommonDecl.h" />
     <ClInclude Include="HighCreditAccout.h" />
     <ClInclude Include="NameSp.h" />
     <ClInclude Include="NormalAccount.h" />

@@ -9,7 +9,7 @@ void AccountHandlr::create() //계좌 개설
 {
     int id;
     //char name[10];
-    String name;
+    String name; //String() 생성자 호출
     int money;
     int option = 0;
     int normal;
@@ -42,18 +42,16 @@ void AccountHandlr::create() //계좌 개설
         }
 
         std::cout << "이름: ";
-        std::cin >> name;
+        std::cin >> name; //std::istream& operator>>( )
         std::cout << "입금액: ";
         std::cin >> money;
         std::cout << "이자율: ";
         std::cin >> normal;
 
-        std::cout << name << " Account Han" << std::endl;
-
         if (option == 1)
         {
-            //member[memNum++] = new NormalAccout(normal, id, "name", money);
-            member[memNum++] = new Account(id, name, money);
+            member[memNum++] = new NormalAccout(normal, id, name, money);
+            //member[memNum++] = new Account( id, name, money);
         }
 
     }
@@ -70,7 +68,7 @@ void AccountHandlr::create() //계좌 개설
             {
                 std::cout << "잘 못된 입력입니다. " << std::endl;
             }
-        } while ((high <= 0 || high > 3));
+        } while ((high <= 0 || high > 3));  
 
         switch (high)
         {

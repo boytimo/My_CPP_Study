@@ -3,7 +3,9 @@
 
 Account::Account()
     :m_id(0), m_name(NULL), m_money(0)
-{}
+{
+    std::cout << "Account()" << std::endl;
+}
 
 //Account::Account(int id, const char* name, int money)
 //    :m_id(id), m_money(money)
@@ -23,10 +25,9 @@ Account::Account()
 //}
 
 Account::Account(int id, String name, int money)
-    :m_id(id), m_money(money)
+    :m_id(id),m_name(name), m_money(money)
 {
-    m_name = name;
-    std::cout <<"Account : " << name << std::endl;
+    std::cout <<"Account(int id, String name, int money) : " << m_name << std::endl;
 }
 
 Account::Account(Account& acc)

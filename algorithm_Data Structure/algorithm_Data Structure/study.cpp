@@ -4304,394 +4304,641 @@
 
 //===================================================
 
-class String
-{
-private:
-	char* m_str;
-	int m_len;
-public:
-	String()
-	{
-		m_len = 0;
-		//m_str = NULL;
-		m_str = NULL; //필자가 작성
-	}
-
-	String(const char* xstr)
-	{
-		std::cout << "String(const char* xstr)" << std::endl;
-		m_len = makeLen(xstr);
-		m_str = new char[m_len];
-		for (int i = 0; i < m_len; i++)
-		{
-			m_str[i] = xstr[i];
-		}
-	}
-
-	~String()
-	{
-		delete[] m_str;
-	}
-
-	String& operator=(const String& xstr)
-	{
-		std::cout << "operator = " << std::endl;
-
-		if (xstr.m_str != NULL)
-		{
-			if (m_str != nullptr)
-			{
-				deleteIndex();
-			}
-
-			m_len = xstr.m_len;
-			m_str = new char[m_len];
-			for (int i = 0; i < m_len; i++)
-			{
-				m_str[i] = xstr.m_str[i];
-			}
-		}
-
-		return *this;
-	}
-
-	bool operator==(const String& xstr)
-	{
-		int j = 0;
-
-		if (xstr.m_len == m_len)
-		{
-			if (xstr.m_len == 0 && m_len == 0)
-			{
-				return true;
-			}
-			for (int i = 0; i < m_len; i++)
-			{
-				if (m_str[i] == xstr.m_str[i])
-				{
-					j++;
-				}
-			}
-			if (j == m_len)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	String operator+(const String& xstr)
-	{
-		std::cout << "operator + " << std::endl;
-		//A = C+B; C와 B값이 비었다면
-
-
-
-		if (m_len == 0 && xstr.m_len == 0)
-		{
-			String xstr2;
-			return xstr2;
-		}
-
-		int tempLen;
-		if ((m_len != 0 && xstr.m_len == 0) || (m_len == 0 && xstr.m_len != 0))
-		{
-			tempLen = m_len + xstr.m_len;
-		}
-		else
-		{
-			tempLen = m_len + xstr.m_len - 1;
-		}
-
-
-		char* tempStr = new char[tempLen];
-
-		//std::cout << tempLen << std::endl;// -> 27
-		//std::cout << m_len << std::endl; // -> 16
-
-
-		//for (int i = 0; i < m_len - 1; i++)
-		//{
-		//	tempStr[i] = m_str[i];
-		//}
-
-		for (int i = 0; i < tempLen; i++)// 0 1 2 3 A = C + B
-		{
-			if (xstr.m_len == 0)  //B가 NULL이라면
-			{
-				tempStr[i] = m_str[i];
-			}
-			else
-			{
-				if (i < m_len - 1) //C와 B를 나눠서 대입하기 위함, -1은 \0를 빼기 위해서 존재
-				{
-					tempStr[i] = m_str[i];
-				}
-				else
-				{
-					tempStr[i] = xstr.m_str[i-(m_len - 1)];
-				}
-			}
-
-		}
-
-		String xstr2(tempStr);
-
-		delete[] tempStr;
-		tempStr = nullptr;
-
-		return xstr2;
-
-
-
-		//String str3 = str1 + str2; 에서 str1에 저장 되는 오류가 발생
-		//m_len += xstr.m_len;
-		//m_str = new char[m_len - 1];
-
-		//for (int i = 0; i < tempLen - 1; i++)
-		//{
-		//	m_str[i] = tempStr[i];
-		//}
-
-		//for (int i = 0; i < m_len; i++)// 0 1 2 3
-		//{
-		//	m_str[tempLen-1 + i] = xstr.m_str[i];
-		//}
-
-
-	}
-
-	String& operator +=(const String& xstr)//A += B, A B
-	{
-		std::cout << "operator += " << std::endl;
-		if (xstr.m_len == 0) //B가 비었다면
-		{
-			return *this;
-		}
-		else
-		{
-			if (m_len == 0) //A가 비었다면
-			{
-				*this = xstr;
-				return *this;
-			}
-			else
-			{
-				char* tempStr = new char[m_len];
-				int tempLen = m_len -1; // \0 제거
-
-				m_len = tempLen + xstr.m_len ;
-				
-				for (int i = 0; i < tempLen; i++)
-				{
-					tempStr[i] = m_str[i];
-					
-				}
-
-				deleteIndex();
-
-				m_str = new char[m_len];
-
-				for (int i = 0; i < m_len; i++)
-				{
-					if (i < tempLen)
-					{
-						m_str[i] = tempStr[i];
-					}
-					else
-					{
-						m_str[i] = xstr.m_str[i-tempLen];
-					}
-
-					std::cout << m_str[i] << std::endl;
-				}
-
-				delete[] tempStr;
-				tempStr = nullptr;
-
-				return *this;
-			}
-			
-
-
-
-
-			//if (m_str != NULL) 
-			//{
-			//	for (int i = 0; i < m_len; i++)
-			//	{
-			//		tempStr[i] = m_str[i];
-			//	}
-
-			//	deleteIndex();
-			//	m_len = m_len + xstr.m_len - 1;
-			//}
-			//else //A가 비었다면
-			//{
-			//	m_len = xstr.m_len;
-			//}
-
-
-			//m_str = new char[m_len];
-
-			//for (int i = 0; i < m_len; i++)
-			//{
-			//	if (i < tempLen - 1)
-			//	{
-			//		m_str[i] = tempStr[i];
-			//	}
-			//	else
-			//	{
-			//		m_str[i] = xstr.m_str[i]; // xstr[i] 0부터 대입 해야하는데 0 이후에 대입해서 오류
-			//	}
-			//}
-
-			/*delete[] tempStr;
-			tempStr = nullptr;
-
-			return *this;*/
-		}
-
-		//A+=B 에서 A가 비어있을 경우 오류 발생
-		//int tempLen = m_len;
-		//char* tempStr = new char[tempLen];
-		//for (int i = 0; i < m_len; i++)
-		//{
-		//	tempStr[i] = m_str[i];
-		//}
-
-		//if (m_str != NULL)
-		//{
-		//	deleteIndex();
-		//} 
-
-
-		//m_len += xstr.m_len;
-		//m_str = new char[m_len - 1];
-
-		//for (int i = 0; i < tempLen - 1; i++)
-		//{
-		//	m_str[i] = tempStr[i];
-		//}
-
-		//for (int i = 0; i < m_len; i++)// 0 1 2 3
-		//{
-		//	m_str[tempLen - 1 + i] = xstr.m_str[i];
-		//}
-		////std::cout << m_len << std::endl; -> 40 ?? str1이 그대로 저장됨
-
-		//delete[] tempStr;
-		//tempStr = nullptr;
-
-		//return *this;
-	}
-
-	void deleteIndex()
-	{
-		delete[] m_str;
-		m_str = nullptr;
-	}
-
-	int makeLen(const char* xstr)
-	{
-		int i = 0;
-
-		while (xstr[i] != '\0')
-		{
-			i++;
-		} // s -> 1 t->2 r->3
-		i++; //-> 4
-		std::cout << i << std::endl;
-		return i;
-	}
-
-
-	friend std::ostream& operator<<(std::ostream& os, const String& str);
-	friend void operator>>(std::istream& is, const String& str); //필자가 작성
-	//friend std::istream& operator >> (std::istream& is, String& str);
-};
-
-void operator>>(std::istream& is, String& xstr)
-{
-
-	char a[100];
-	is >> a;
-	String tempS(a);
-	xstr = tempS;
-}
-
-//std::istream& operator >> (std::istream& is, String& str) //책 내용
+//class String
 //{
-//	char s[100];
-//	is >> s;
-//	str = String(s); // str.operator=(String(s))
-//	return is;
+//private:
+//	char* m_str;
+//	int m_len;
+//public:
+//	String()
+//	{
+//		m_len = 0;
+//		//m_str = NULL;
+//		m_str = NULL; //필자가 작성
+//	}
+//
+//	String(const char* xstr)
+//	{
+//		std::cout << "String(const char* xstr)" << std::endl;
+//		m_len = makeLen(xstr);
+//		m_str = new char[m_len];
+//		for (int i = 0; i < m_len; i++)
+//		{
+//			m_str[i] = xstr[i];
+//		}
+//	}
+//
+//	~String()
+//	{
+//		delete[] m_str;
+//	}
+//
+//	String& operator=(const String& xstr)
+//	{
+//		std::cout << "operator = " << std::endl;
+//
+//		if (xstr.m_str != NULL)
+//		{
+//			if (m_str != nullptr)
+//			{
+//				deleteIndex();
+//			}
+//
+//			m_len = xstr.m_len;
+//			m_str = new char[m_len];
+//			for (int i = 0; i < m_len; i++)
+//			{
+//				m_str[i] = xstr.m_str[i];
+//			}
+//		}
+//
+//		return *this;
+//	}
+//
+//	bool operator==(const String& xstr)
+//	{
+//		int j = 0;
+//
+//		if (xstr.m_len == m_len)
+//		{
+//			if (xstr.m_len == 0 && m_len == 0)
+//			{
+//				return true;
+//			}
+//			for (int i = 0; i < m_len; i++)
+//			{
+//				if (m_str[i] == xstr.m_str[i])
+//				{
+//					j++;
+//				}
+//			}
+//			if (j == m_len)
+//			{
+//				return true;
+//			}
+//			else
+//			{
+//				return false;
+//			}
+//		}
+//		else
+//		{
+//			return false;
+//		}
+//	}
+//
+//	String operator+(const String& xstr)
+//	{
+//		std::cout << "operator + " << std::endl;
+//		//A = C+B; C와 B값이 비었다면
+//
+//
+//
+//		if (m_len == 0 && xstr.m_len == 0)
+//		{
+//			String xstr2;
+//			return xstr2;
+//		}
+//
+//		int tempLen;
+//		if ((m_len != 0 && xstr.m_len == 0) || (m_len == 0 && xstr.m_len != 0))
+//		{
+//			tempLen = m_len + xstr.m_len;
+//		}
+//		else
+//		{
+//			tempLen = m_len + xstr.m_len - 1;
+//		}
+//
+//
+//		char* tempStr = new char[tempLen];
+//
+//		//std::cout << tempLen << std::endl;// -> 27
+//		//std::cout << m_len << std::endl; // -> 16
+//
+//
+//		//for (int i = 0; i < m_len - 1; i++)
+//		//{
+//		//	tempStr[i] = m_str[i];
+//		//}
+//
+//		for (int i = 0; i < tempLen; i++)// 0 1 2 3 A = C + B
+//		{
+//			if (xstr.m_len == 0)  //B가 NULL이라면
+//			{
+//				tempStr[i] = m_str[i];
+//			}
+//			else
+//			{
+//				if (i < m_len - 1) //C와 B를 나눠서 대입하기 위함, -1은 \0를 빼기 위해서 존재
+//				{
+//					tempStr[i] = m_str[i];
+//				}
+//				else
+//				{
+//					tempStr[i] = xstr.m_str[i-(m_len - 1)];
+//				}
+//			}
+//
+//		}
+//
+//		String xstr2(tempStr);
+//
+//		delete[] tempStr;
+//		tempStr = nullptr;
+//
+//		return xstr2;
+//
+//
+//
+//		//String str3 = str1 + str2; 에서 str1에 저장 되는 오류가 발생
+//		//m_len += xstr.m_len;
+//		//m_str = new char[m_len - 1];
+//
+//		//for (int i = 0; i < tempLen - 1; i++)
+//		//{
+//		//	m_str[i] = tempStr[i];
+//		//}
+//
+//		//for (int i = 0; i < m_len; i++)// 0 1 2 3
+//		//{
+//		//	m_str[tempLen-1 + i] = xstr.m_str[i];
+//		//}
+//
+//
+//	}
+//
+//	String& operator +=(const String& xstr)//A += B, A B
+//	{
+//		std::cout << "operator += " << std::endl;
+//		if (xstr.m_len == 0) //B가 비었다면
+//		{
+//			return *this;
+//		}
+//		else
+//		{
+//			if (m_len == 0) //A가 비었다면
+//			{
+//				*this = xstr;
+//				return *this;
+//			}
+//			else
+//			{
+//				char* tempStr = new char[m_len];
+//				int tempLen = m_len -1; // \0 제거
+//
+//				m_len = tempLen + xstr.m_len ;
+//				
+//				for (int i = 0; i < tempLen; i++)
+//				{
+//					tempStr[i] = m_str[i];
+//					
+//				}
+//
+//				deleteIndex();
+//
+//				m_str = new char[m_len];
+//
+//				for (int i = 0; i < m_len; i++)
+//				{
+//					if (i < tempLen)
+//					{
+//						m_str[i] = tempStr[i];
+//					}
+//					else
+//					{
+//						m_str[i] = xstr.m_str[i-tempLen];
+//					}
+//
+//					std::cout << m_str[i] << std::endl;
+//				}
+//
+//				delete[] tempStr;
+//				tempStr = nullptr;
+//
+//				return *this;
+//			}
+//			
+//
+//
+//
+//
+//			//if (m_str != NULL) 
+//			//{
+//			//	for (int i = 0; i < m_len; i++)
+//			//	{
+//			//		tempStr[i] = m_str[i];
+//			//	}
+//
+//			//	deleteIndex();
+//			//	m_len = m_len + xstr.m_len - 1;
+//			//}
+//			//else //A가 비었다면
+//			//{
+//			//	m_len = xstr.m_len;
+//			//}
+//
+//
+//			//m_str = new char[m_len];
+//
+//			//for (int i = 0; i < m_len; i++)
+//			//{
+//			//	if (i < tempLen - 1)
+//			//	{
+//			//		m_str[i] = tempStr[i];
+//			//	}
+//			//	else
+//			//	{
+//			//		m_str[i] = xstr.m_str[i]; // xstr[i] 0부터 대입 해야하는데 0 이후에 대입해서 오류
+//			//	}
+//			//}
+//
+//			/*delete[] tempStr;
+//			tempStr = nullptr;
+//
+//			return *this;*/
+//		}
+//
+//		//A+=B 에서 A가 비어있을 경우 오류 발생
+//		//int tempLen = m_len;
+//		//char* tempStr = new char[tempLen];
+//		//for (int i = 0; i < m_len; i++)
+//		//{
+//		//	tempStr[i] = m_str[i];
+//		//}
+//
+//		//if (m_str != NULL)
+//		//{
+//		//	deleteIndex();
+//		//} 
+//
+//
+//		//m_len += xstr.m_len;
+//		//m_str = new char[m_len - 1];
+//
+//		//for (int i = 0; i < tempLen - 1; i++)
+//		//{
+//		//	m_str[i] = tempStr[i];
+//		//}
+//
+//		//for (int i = 0; i < m_len; i++)// 0 1 2 3
+//		//{
+//		//	m_str[tempLen - 1 + i] = xstr.m_str[i];
+//		//}
+//		////std::cout << m_len << std::endl; -> 40 ?? str1이 그대로 저장됨
+//
+//		//delete[] tempStr;
+//		//tempStr = nullptr;
+//
+//		//return *this;
+//	}
+//
+//	void deleteIndex()
+//	{
+//		delete[] m_str;
+//		m_str = nullptr;
+//	}
+//
+//	int makeLen(const char* xstr)
+//	{
+//		int i = 0;
+//
+//		while (xstr[i] != '\0')
+//		{
+//			i++;
+//		} // s -> 1 t->2 r->3
+//		i++; //-> 4
+//		std::cout << i << std::endl;
+//		return i;
+//	}
+//
+//
+//	friend std::ostream& operator<<(std::ostream& os, const String& str);
+//	friend void operator>>(std::istream& is, const String& str); //필자가 작성
+//	//friend std::istream& operator >> (std::istream& is, String& str);
+//};
+//
+//void operator>>(std::istream& is, String& xstr)
+//{
+//
+//	char a[100];
+//	is >> a;
+//	String tempS(a);
+//	xstr = tempS;
+//}
+//
+////std::istream& operator >> (std::istream& is, String& str) //책 내용
+////{
+////	char s[100];
+////	is >> s;
+////	str = String(s); // str.operator=(String(s))
+////	return is;
+////}
+//
+//std::ostream& operator<<(std::ostream& os, const String& xstr)
+//{
+//	if (xstr.m_len == 0)
+//	{
+//		os << "값이 없음";
+//		return os;
+//	}
+//	else
+//	{
+//		os << xstr.m_str;
+//		return os;
+//	}
+//
+//}
+//
+//int main()
+//{
+//	String str1("str");
+//	//String str1 = "str";
+//	String str2 = "TELl";
+//
+//	String str3 = str1 + str2;
+//	str2 += str1; //-> TELI str
+//
+//	str2 = str3;
+//
+//	std::cout << str1 << std::endl;
+//	std::cout << str2 << std::endl;
+//
+//	if (str2 == str3)
+//	{
+//		std::cout << "같은 문자열" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "다른 문자열" << std::endl;
+//	}
+//
+//	String str4;
+//
+//	std::cout << "문자 입력 : ";
+//	std::cin >> str4;
+//
+//	std::cout << "문자 입력 : ";
+//	std::cin >> str1;
+//
+//	if (str4 == str1)
+//	{
+//		std::cout << "같은 문자열" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "다른 문자열" << std::endl;
+//	}
+//
+//	String str5, str6;
+//	str5 = str1 + str5;
+//	std::cout << str5 << std::endl;
+//}
+//
+
+//=======================================================
+////p.535 문제 1
+//#include <iostream>
+//using namespace std;
+////인자로 전달되는 두 변수에 저장된 값을 서로 교환하는 SwapData라는 이름의 함수를 템플릿으로 정의
+////그리고 다음 Point 클래스를 대상으로 값의 교환이 이뤄짐을 확인할 수 있도록 main 함수를 구성
+//
+//class Point
+//{
+//private:
+//	int xpos, ypos;
+//
+//public:
+//	Point(int x = 0, int y =0): xpos(x),ypos(y)
+//	{ }
+//	void showPosition()const
+//	{
+//		cout << '[' << xpos << ", " << ypos << ']' << endl;
+//	}
+//};
+//
+//template <typename T>
+//void swapData(T &num, T &num2)
+//{
+//	T tmp;
+//	tmp = num;
+//	num = num2;
+//	num2 = tmp;
+//}
+//
+//int main()
+//{
+//	Point p1(4,5);
+//	Point p2(2,3);
+//	swapData<Point>(p1,p2);
+//
+//	p1.showPosition();
+//	p2.showPosition();
 //}
 
-std::ostream& operator<<(std::ostream& os, const String& xstr)
-{
-	if (xstr.m_len == 0)
-	{
-		os << "값이 없음";
-		return os;
-	}
-	else
-	{
-		os << xstr.m_str;
-		return os;
-	}
+//-------------------------------------
+//
+////문제 2
+////p.536
+//
+////다음은 int형 배열에 저장된 값을 모두 더해서 그 결과를 반환하는 기능의 함수이다
+////함수를 템플릿으로 정의, 다양한 자료형의 배열을 대상으로 합을 계산하는 예제 작성
+//using namespace std;
+//
+//
+//
+////int SumArray(int arr[], int len)
+////{
+////	int sum = 0;
+////	for (int i = 0; i < len; i++)
+////	{
+////		sum += arr[i];
+////	}
+////	return sum;
+////}
+//
+//template <typename T>
+//T sumArray(T arr[], int len)
+//{
+//	T sum = 0;
+//	for (int i = 0; i < len; i++)
+//	{
+//		sum += arr[i];
+//	}
+//	return sum;
+//}
+//
+//
+//int main()
+//{
+//	int len = 4;
+//	double arr[] = { 1.5,2.4,4.5,1.2 };
+//	auto sum = sumArray(arr, len);
+//
+//	std::cout << sum << std::endl;
+//}
 
+//#include <iostream>
+//#include <cstring>
+//using namespace std;
+//
+//template <typename T>
+//T Max(T a, T b)
+//{
+//	return a > b ? a : b;
+//}
+//
+//template <>
+//char* Max<char*>(char* a, char* b)
+//{
+//	cout << "char* Max<char*>(char* a, char* b)" << endl;
+//	return strlen(a) > strlen(b) ? a : b;
+//}
+//
+//template <>
+//const char* Max(const char* a, const char* b)
+//{
+//	cout << "const char* Max<const char*>(const char* a, const char* b)" << endl;
+//	return strcmp(a, b) > 0 ? a : b;
+//}
+//
+//
+//int main(void)
+//{
+//	cout << Max(11, 15) << endl;
+//	cout << Max('T', 'Q') << endl;
+//	cout << Max(3.5, 7.5) << endl;
+//	cout << Max("Simple", "Best") << endl;
+//
+//	char str1[] = "Simple";
+//	char str2[] = "Best";
+//	cout << Max(str1, str2) << endl;
+//	return 0;
+//}
+
+#include<iostream>
+#include<string>
+#include<vector>
+#include<bitset>
+using namespace std;
+
+__int64 id_0X0CFF27CC(bool xFcRunCmd, bool xFcStpCmd, bool xIsoRestDtecReq, bool xFcPwrMnCmd, wchar_t xFcPwrReq, bool xHvFltEmgSdReq, bool xTnkClzEmgSdReq); //7
+__int64 id_0X18FF28CC(bool xVcuRdy, bool xVehRdy, unsigned char xAmbRmp, wchar_t xWhlBsVehSpd, bool xFcClntLvlLo, unsigned char xHvBatSoc, unsigned char xHvBatDchLim, unsigned char xStckDiagRspn, unsigned char xGdsCspRunRspn); //11
+__int64 id_0X18FF29CC(unsigned short xOdoInfo, unsigned char xH2MidPrs, bool xDrvCyc); //3
+__int64 id_0X18FF17CC(wchar_t xHsMxPrmPwrLmt); //1
+__int64 id_0x0C0000CC(bool xCshAct); //1
+
+void TEST(int* point)
+{
+	*point = 20;
 }
 
 int main()
 {
-	String str1("str");
-	//String str1 = "str";
-	String str2 = "TELl";
+	char hex[8];
 
-	String str3 = str1 + str2;
-	str2 += str1; //-> TELI str
+	__int64 a = 0;
 
-	str2 = str3;
 
-	std::cout << str1 << std::endl;
-	std::cout << str2 << std::endl;
 
-	if (str2 == str3)
+	a = id_0X0CFF27CC(1, 1, 1, 1, 0xfff, 1, 1);
+	
+	for (int i = 0; i < 8; i++)
 	{
-		std::cout << "같은 문자열" << std::endl;
-	}
-	else
-	{
-		std::cout << "다른 문자열" << std::endl;
+		hex[i] = (a >> (8 * i)) & 0xFF; // a의 비트를 8개 밀어낸 후 그 값을 0xFF와 and한다. 
+		cout << bitset<8>(hex[i]) << endl;
 	}
 
-	String str4;
-
-	std::cout << "문자 입력 : ";
-	std::cin >> str4;
-
-	std::cout << "문자 입력 : ";
-	std::cin >> str1;
-
-	if (str4 == str1)
-	{
-		std::cout << "같은 문자열" << std::endl;
-	}
-	else
-	{
-		std::cout << "다른 문자열" << std::endl;
-	}
-
-	String str5, str6;
-	str5 = str1 + str5;
-	std::cout << str5 << std::endl;
+	int point_int = 10;
+	
+	TEST(&point_int);
+	cout << point_int;
+	
 }
 
+__int64 id_0X0CFF27CC(bool xFcRunCmd, bool xFcStpCmd, bool xIsoRestDtecReq, bool xFcPwrMnCmd, wchar_t xFcPwrReq, bool xHvFltEmgSdReq, bool xTnkClzEmgSdReq)
+{
+	//0 2 3 4 5~16 17 34 자료형은 unsigned char, bool, wchar_t
+	__int64 xsumData = 0; //__int64 = 64비트
+	
+	xsumData = xsumData | xTnkClzEmgSdReq;
+	xsumData = xsumData << 17; //34 - 17 = 왼쪽으로 17Shift
+	xsumData = xsumData | xHvFltEmgSdReq;
+	xsumData = xsumData << 12;
+	xsumData = xsumData | xFcPwrReq;
+	xsumData = xsumData << 1;
+	xsumData = xsumData | xFcPwrMnCmd;
+	xsumData = xsumData << 1;
+	xsumData = xsumData | xIsoRestDtecReq;
+	xsumData = xsumData << 1;
+	xsumData = xsumData | xFcStpCmd;
+	xsumData = xsumData << 2;
+	xsumData = xsumData | xFcRunCmd;
+	cout << bitset<64>(xsumData) << endl;
+
+	return xsumData;
+}
+
+__int64 id_0X18FF28CC(bool xVcuRdy, bool xVehRdy, unsigned char xAmbRmp, wchar_t xWhlBsVehSpd, bool xFcClntLvlLo, unsigned char xHvBatSoc, unsigned char xHvBatDchLim, unsigned char xStckDiagRspn, unsigned char xGdsCspRunRspn)
+{
+	//0 2 3-10 27 28-36 44-51 52-53 56-57 58-59 62-63
+	__int64 xsumData = 0; //__int64 = 64비트
+
+	xsumData = xsumData | xGdsCspRunRspn;
+	xsumData = xsumData << 4;
+	xsumData = xsumData | xStckDiagRspn;
+	xsumData = xsumData << 2;
+	xsumData = xsumData | xHvBatDchLim;
+	xsumData = xsumData << 4;
+	xsumData = xsumData | xHvBatSoc;
+	xsumData = xsumData << 8;
+	xsumData = xsumData | xFcClntLvlLo;
+	xsumData = xsumData << 16;
+	xsumData = xsumData | xWhlBsVehSpd;
+	xsumData = xsumData << 25;
+	xsumData = xsumData | xAmbRmp;
+	xsumData = xsumData << 1;
+	xsumData = xsumData | xVehRdy;
+	xsumData = xsumData << 2;
+	xsumData = xsumData | xVcuRdy;
+
+	cout << bitset<64>(xsumData) << endl;
+
+	return xsumData;
+}
+
+__int64 id_0X18FF29CC(unsigned short xOdoInfo, unsigned char xH2MidPrs, bool xDrvCyc)
+{
+	//0-23 24-31 32
+	__int64 xsumData = 0; //__int64 = 64비트
+
+	xsumData = xsumData | xDrvCyc;
+	xsumData = xsumData << 8;
+	xsumData = xsumData | xH2MidPrs;
+	xsumData = xsumData << 24;
+	xsumData = xsumData | xOdoInfo;
+
+	return xsumData;
+}
+
+__int64 id_0X18FF17CC(wchar_t xHsMxPrmPwrLmt)
+{
+	//25-36
+	__int64 xsumData = 0; //__int64 = 64비트
+
+	xsumData = xsumData | xHsMxPrmPwrLmt;
+	xsumData = xsumData << 25;
+
+	return xsumData;
+
+}
+
+__int64 id_0x0C0000CC(bool xCshAct)
+{
+	//0
+	__int64 xsumData = 0; //__int64 = 64비트
+
+	xsumData = xsumData | xCshAct;
+
+	return xsumData;
+}
